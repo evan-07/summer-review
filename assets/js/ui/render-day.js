@@ -153,6 +153,7 @@ export const renderDayPage = (state) => {
     document.querySelector('[data-finish-day-msg]').textContent = complete ? 'Day complete! Fantastic perseverance!' : 'Complete both sessions first.';
     if (complete) {
       saveState(state);
+      document.querySelector('[data-finish-day-btn]').disabled = true;
       mascot.celebrate();
     }
   };
