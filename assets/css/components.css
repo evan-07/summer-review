@@ -21,3 +21,7 @@
 .day-card--locked{opacity:.45;cursor:not-allowed;filter:grayscale(60%)}
 .btn--disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
 .btn-danger{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
+.op{font-weight:900;font-size:1.2em}
+.op--plus{color:#20a84a}.op--minus{color:#e05c00}.op--times{color:#7e44c0}
+.card ol{font-size:1.25rem;line-height:2;letter-spacing:.01em}
+.card ol li{margin-bottom:.5rem;padding:4px 0}
