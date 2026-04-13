@@ -92,6 +92,106 @@ const COSTUMES = [
 export const getCostumeSVG = (day) => COSTUMES[day - 1] ?? COSTUMES[0];
 
 // ============================================================
-// DOM API — implemented in Task 6
+// SVG BUILDER
 // ============================================================
-export const createMascot = (_day) => ({ react: () => {}, celebrate: () => {} });
+
+function buildSVG(day) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" class="mascot-svg">
+  <circle cx="26" cy="22" r="12" fill="#F5C842" stroke="#D4A520" stroke-width="1.5"/>
+  <circle cx="74" cy="22" r="12" fill="#F5C842" stroke="#D4A520" stroke-width="1.5"/>
+  <circle cx="26" cy="22" r="6" fill="#FFAAB0"/>
+  <circle cx="74" cy="22" r="6" fill="#FFAAB0"/>
+  <ellipse cx="50" cy="97" rx="24" ry="20" fill="#F5C842" stroke="#D4A520" stroke-width="1.5"/>
+  <ellipse cx="50" cy="99" rx="14" ry="12" fill="#FFE07A"/>
+  <ellipse cx="22" cy="88" rx="7" ry="13" fill="#F5C842" stroke="#D4A520" stroke-width="1.5" transform="rotate(-20 22 88)"/>
+  <ellipse cx="78" cy="88" rx="7" ry="13" fill="#F5C842" stroke="#D4A520" stroke-width="1.5" transform="rotate(20 78 88)"/>
+  <circle cx="50" cy="46" r="32" fill="#F5C842" stroke="#D4A520" stroke-width="1.5"/>
+  <circle cx="40" cy="42" r="5" fill="#1a1a1a"/>
+  <circle cx="60" cy="42" r="5" fill="#1a1a1a"/>
+  <circle cx="42" cy="40" r="1.8" fill="white"/>
+  <circle cx="62" cy="40" r="1.8" fill="white"/>
+  <ellipse cx="50" cy="52" rx="4" ry="3" fill="#D4735A"/>
+  <path d="M42,56 Q50,64 58,56" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <g>${getCostumeSVG(day)}</g>
+</svg>`;
+}
+
+// ============================================================
+// CONFETTI HELPERS
+// ============================================================
+
+const CONFETTI_COLORS = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#c77dff', '#ff9f43'];
+
+function addFloatingConfetti() {
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'mascot-float-confetti';
+    p.style.cssText = [
+      `left:${Math.round(5 + Math.random() * 90)}%`,
+      `top:${Math.round(10 + Math.random() * 50)}%`,
+      `background:${CONFETTI_COLORS[i % CONFETTI_COLORS.length]}`,
+      `animation-delay:${(Math.random() * 0.2).toFixed(2)}s`,
+      `width:${Math.round(6 + Math.random() * 6)}px`,
+      `height:${Math.round(6 + Math.random() * 6)}px`,
+      `border-radius:${Math.random() > 0.5 ? '50%' : '2px'}`,
+    ].join(';');
+    document.body.appendChild(p);
+    p.addEventListener('animationend', () => p.remove(), { once: true });
+  }
+}
+
+function makeFullConfetti() {
+  const wrap = document.createElement('div');
+  wrap.className = 'mascot-confetti-full';
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'mascot-confetti-piece';
+    p.style.cssText = [
+      `left:${(Math.random() * 100).toFixed(1)}%`,
+      `background:${CONFETTI_COLORS[i % CONFETTI_COLORS.length]}`,
+      `animation-delay:${(Math.random() * 1).toFixed(2)}s`,
+      `animation-duration:${(1.2 + Math.random() * 1.2).toFixed(2)}s`,
+      `width:${Math.round(6 + Math.random() * 8)}px`,
+      `height:${Math.round(6 + Math.random() * 8)}px`,
+      `border-radius:${Math.random() > 0.5 ? '50%' : '2px'}`,
+    ].join(';');
+    wrap.appendChild(p);
+  }
+  return wrap;
+}
+
+// ============================================================
+// DOM API
+// ============================================================
+
+export const createMascot = (day) => {
+  const wrap = document.getElementById('mascot-wrap');
+  if (!wrap) return { react: () => {}, celebrate: () => {} };
+
+  wrap.innerHTML = buildSVG(day);
+  const svg = wrap.querySelector('.mascot-svg');
+
+  const react = (type) => {
+    svg.classList.remove('mascot--wave', 'mascot--bounce', 'mascot--cheer');
+    void svg.offsetWidth; // force reflow to restart animation
+    svg.classList.add(`mascot--${type}`);
+    svg.addEventListener('animationend', () => svg.classList.remove(`mascot--${type}`), { once: true });
+    if (type === 'cheer') addFloatingConfetti();
+  };
+
+  const celebrate = () => {
+    const overlay = document.createElement('div');
+    overlay.id = 'mascot-overlay';
+    overlay.innerHTML = `
+      <div class="mascot-overlay__inner">
+        <div class="mascot-overlay__char">${buildSVG(day)}</div>
+        <p class="mascot-overlay__msg">Amazing job! ⭐</p>
+        <button class="btn btn-primary mascot-overlay__dismiss">Keep going!</button>
+      </div>`;
+    overlay.appendChild(makeFullConfetti());
+    document.body.appendChild(overlay);
+    overlay.querySelector('.mascot-overlay__dismiss').onclick = () => overlay.remove();
+  };
+
+  return { react, celebrate };
+};
