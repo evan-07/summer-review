@@ -24,6 +24,7 @@
 
   function fillDaySelects() {
     const dayOptions = document.querySelector("[data-day-options]");
+    if (!dayOptions || !filters.day) return;
     for (let i = 1; i <= api.TOTAL_DAYS; i++) {
       const option = document.createElement("option");
       option.value = i;
@@ -70,6 +71,7 @@
   }
 
   function renderSummary(rows) {
+    if (!summaryWrap) return;
     if (!rows.length) {
       summaryWrap.innerHTML = summaryItem("Total entries", "0") + summaryItem("Average score", "-") + summaryItem("Recent activity", "-");
       return;
@@ -93,6 +95,7 @@
 
   function renderLineTrend(selector, rows, valueAccessor, color) {
     const svg = document.querySelector(selector);
+    if (!svg) return;
     if (!rows.length) {
       svg.innerHTML = "";
       return;
@@ -114,6 +117,7 @@
 
   function renderSectionBars(rows) {
     const wrap = document.querySelector("[data-section-bars]");
+    if (!wrap) return;
     const sections = getSectionAverages(rows).sort((a, b) => b.avg - a.avg);
     if (!sections.length) {
       wrap.innerHTML = "<p>No section data yet.</p>";
@@ -123,6 +127,7 @@
   }
 
   function renderHistory(rows) {
+    if (!historyBody) return;
     historyBody.innerHTML = "";
     rows.slice().sort((a, b) => new Date(b.recordedAt) - new Date(a.recordedAt)).forEach((entry) => {
       const tr = document.createElement("tr");
@@ -152,6 +157,7 @@
   fillDaySelects();
   rerender();
 
+  if (!form || !historyBody) return;
   form.addEventListener("change", () => {
     const day = form.day.value;
     const session = form.session.value;

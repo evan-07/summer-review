@@ -8,7 +8,7 @@
 </head>
 <body data-page="day" data-day="11">
   <header class="top-nav">
-    <div class="nav-left">
+    <div class="nav-left button-group button-group--stack-mobile">
       <a class="btn" href="../index.html">🏠 Home</a>
       <a class="btn" data-prev-day href="#">← Previous Day</a>
       <a class="btn" data-next-day href="#">Next Day →</a>
@@ -27,16 +27,15 @@
       <h1 data-day-title></h1>
       <p data-day-note></p>
       <p><strong>Start with this:</strong> <span data-day-inspiration></span> ✨</p>
-      <button class="btn btn-primary" data-start-day>Start Day</button>
+      <div class="session-buttons">
+        <button class="btn btn-primary" data-start-session="morning" data-animate="button">Morning Session</button>
+        <button class="btn btn-primary" data-start-session="afternoon" data-animate="button">Afternoon Session</button>
+      </div>
     </section>
 
     <section data-resume></section>
 
-    <section class="card hidden" data-session-panel>
-      <div class="session-buttons">
-        <button class="btn btn-primary" data-start-session="morning">Start Morning Session</button>
-        <button class="btn btn-primary" data-start-session="afternoon">Start Afternoon Session</button>
-      </div>
+    <section class="card" data-session-panel>
       <h2 data-session-title>Choose a session to begin</h2>
       <div class="card" data-timer-card></div>
       <div class="pills" data-section-pills></div>
@@ -67,7 +66,7 @@
     <section class="card hidden" data-finish-day>
       <h3>🏁 Finish Day</h3>
       <p data-finish-day-msg>This unlocks after both Morning and Afternoon are complete.</p>
-      <button class="btn btn-primary" data-finish-day-btn>Mark Day Complete</button>
+      <button class="btn btn-primary" data-finish-day-btn data-animate="button">Mark Day Complete</button>
     </section>
   </main>
 
