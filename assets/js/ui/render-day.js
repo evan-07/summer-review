@@ -17,7 +17,7 @@ export const renderDayPage = (state) => {
   let timerInterval = null;
 
   document.body.classList.add(cfg.theme.className);
-  document.querySelector('[data-day-title]').textContent = `Day ${day} ${cfg.theme.icon} — ${cfg.theme.name}`;
+  document.querySelector('[data-day-title]').textContent = `Day ${day} ${cfg.theme.icon} \u2014 ${cfg.theme.name}`;
   document.querySelector('[data-day-note]').textContent = cfg.note;
   document.querySelector('[data-day-inspiration]').textContent = cfg.inspiration;
   renderTracker(document.querySelector('[data-progress-tracker]'), day, state.doneDays);
