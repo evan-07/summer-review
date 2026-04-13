@@ -76,7 +76,7 @@ export const renderDayPage = (state) => {
       }
       saveState(state);
       if (idx < CATEGORY_ORDER.length - 1) renderSection();
-      else document.querySelector('[data-session-content]').innerHTML = '<section class="card"><h3>Session complete! ✅</h3></section>';
+      else document.querySelector('[data-session-content]').innerHTML = '<section class="card"><h3>Session complete! \u2705</h3></section>';
       recalcDay(state, day);
       renderSessionTimer();
       if (dayProgress.dayCompleted) document.querySelector('[data-finish-day]').classList.remove('hidden');
