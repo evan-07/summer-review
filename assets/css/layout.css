@@ -1,5 +1,7 @@
 .top-nav{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;padding:10px;border-bottom:1px solid var(--line);background:#f8fbff}
 .nav-left,.nav-right,.button-row,.button-group,.session-buttons{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.button-group--split{justify-content:space-between}
+.button-group--stack-mobile > *{flex:1 1 220px}
 .day-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.progress-tracker{display:grid;grid-template-columns:repeat(15,minmax(0,1fr));gap:6px;margin:10px 0}
 .parent-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}.parent-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.full{grid-column:1/-1}
 @media (max-width:900px){.day-grid,.parent-layout,.parent-form-grid,.session-buttons{grid-template-columns:1fr}.progress-tracker{grid-template-columns:repeat(5,minmax(0,1fr))}}

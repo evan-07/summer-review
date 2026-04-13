@@ -13,7 +13,17 @@ export const renderIndexPage = (state) => {
 
   const continueWrap = document.querySelector('[data-continue-day]');
   const active = state.activeDay && getDayProgress(state, state.activeDay);
-  continueWrap.innerHTML = active && !active.dayCompleted ? `<a class="card day-card" href="${getDayUrl(state.activeDay)}">Continue Day ${state.activeDay}</a>` : '';
+  continueWrap.innerHTML = active && !active.dayCompleted
+    ? `<section class="card continue-day-panel" aria-label="Continue current day">
+        <div class="button-group button-group--split button-group--stack-mobile">
+          <div class="continue-day-copy">
+            <h3>Continue Day ${state.activeDay}</h3>
+            <p>Jump back into your in-progress practice.</p>
+          </div>
+          <a class="btn btn-primary" href="${getDayUrl(state.activeDay)}">Continue Day ${state.activeDay}</a>
+        </div>
+      </section>`
+    : '';
 
   const grid = document.querySelector('[data-day-grid]');
   grid.innerHTML = '';
