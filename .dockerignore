@@ -1,0 +1,11 @@
+.git/
+node_modules/
+test-results/
+tests/
+docs/
+grade2-math-enrichment-plan.html
+package*.json
+vitest.config.js
+playwright.config.js
+.gitkeep
+README.md
