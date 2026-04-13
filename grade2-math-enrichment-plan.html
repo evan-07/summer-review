@@ -12,6 +12,12 @@
       --line: #d8e1f2;
       --accent: #1d4ed8;
       --soft: #e9f0ff;
+      --theme-page: #f5f8ff;
+      --theme-card: #ffffff;
+      --theme-line: #d8e1f2;
+      --theme-glow: rgba(29, 78, 216, 0.1);
+      --theme-accent: #1d4ed8;
+      --theme-header: linear-gradient(135deg, #dff4ff, #eef8ff);
     }
 
     * { box-sizing: border-box; }
@@ -19,18 +25,22 @@
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: var(--bg);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.8), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(255, 255, 255, 0.65), transparent 26%),
+        var(--theme-page);
       color: var(--ink);
       font-size: 24px;
       line-height: 1.75;
+      transition: background 250ms ease;
     }
 
     header {
       position: sticky;
       top: 0;
       z-index: 30;
-      background: rgba(245, 248, 255, 0.97);
-      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--theme-page) 94%, white);
+      border-bottom: 1px solid var(--theme-line);
       padding: 14px;
       backdrop-filter: blur(4px);
     }
@@ -68,11 +78,11 @@
     }
 
     .panel {
-      background: var(--card);
-      border: 1px solid var(--line);
+      background: var(--theme-card);
+      border: 1px solid var(--theme-line);
       border-radius: 22px;
       padding: 18px;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+      box-shadow: 0 8px 24px var(--theme-glow);
     }
 
     .hidden { display: none !important; }
@@ -98,12 +108,17 @@
     }
 
     .day-link {
-      border: 2px solid #d4def7;
+      border: 2px solid color-mix(in srgb, var(--theme-line) 78%, white);
       border-radius: 18px;
-      background: #fff;
+      background: color-mix(in srgb, var(--theme-card) 90%, white);
       text-align: left;
       padding: 12px;
       cursor: pointer;
+      transition: transform 120ms ease;
+    }
+
+    .day-link:hover {
+      transform: translateY(-2px);
     }
 
     .day-link strong {
@@ -127,7 +142,7 @@
       border-radius: 999px;
       font-size: 0.75rem;
       font-weight: 700;
-      background: #edf2ff;
+      background: color-mix(in srgb, var(--theme-card) 55%, var(--theme-page));
       color: #1e3a8a;
     }
 
@@ -136,6 +151,8 @@
       padding: 14px;
       color: #10274f;
       margin-bottom: 12px;
+      background: var(--theme-header);
+      border: 1px solid color-mix(in srgb, var(--theme-line) 75%, white);
     }
 
     .day-header h2 {
@@ -173,16 +190,16 @@
     }
 
     .section-card {
-      border: 1px solid #dce4f6;
+      border: 1px solid color-mix(in srgb, var(--theme-line) 78%, white);
       border-radius: 16px;
       padding: 16px;
-      background: #fcfdff;
+      background: color-mix(in srgb, var(--theme-card) 92%, white);
     }
 
     .section-title {
       margin: 0 0 6px;
       font-size: 1.1rem;
-      color: #1d3c88;
+      color: color-mix(in srgb, var(--theme-accent) 65%, #132446);
     }
 
     .section-subtitle {
@@ -238,6 +255,33 @@
     .theme-4 { background: linear-gradient(135deg, #ffe7f1, #fff1f7); }
     .theme-5 { background: linear-gradient(135deg, #ebe9ff, #f4f3ff); }
 
+    .story-card {
+      margin-bottom: 12px;
+      border-radius: 16px;
+      border: 1px solid color-mix(in srgb, var(--theme-line) 78%, white);
+      padding: 12px 14px;
+      background: color-mix(in srgb, var(--theme-page) 75%, white);
+    }
+
+    .story-card h3 {
+      margin: 0 0 4px;
+      font-size: 0.9rem;
+      color: color-mix(in srgb, var(--theme-accent) 70%, #10274f);
+    }
+
+    .story-card p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #293957;
+      line-height: 1.55;
+    }
+
+    .scene {
+      margin-top: 8px;
+      font-size: 1.05rem;
+      letter-spacing: 0.05em;
+    }
+
     @media (max-width: 760px) {
       body { font-size: 22px; line-height: 1.8; }
       .day-grid { grid-template-columns: 1fr; }
@@ -270,21 +314,39 @@
   <script>
     const categoryOrder = ["Easy", "Intermediate", "Pattern Recognition", "Hard", "Problem Solving"];
     const themes = [
-      { name: "Nature Forest", icon: "🌳", cls: "theme-1" },
-      { name: "Safari Animals", icon: "🦁", cls: "theme-2" },
-      { name: "Ocean Friends", icon: "🐬", cls: "theme-3" },
-      { name: "Dinosaur Land", icon: "🦕", cls: "theme-4" },
-      { name: "Space Mission", icon: "🚀", cls: "theme-5" },
-      { name: "Sky Aircraft", icon: "✈️", cls: "theme-1" },
-      { name: "Jungle Adventure", icon: "🐒", cls: "theme-2" },
-      { name: "Farm Day", icon: "🚜", cls: "theme-3" },
-      { name: "Arctic Animals", icon: "🐧", cls: "theme-4" },
-      { name: "Rainbow World", icon: "🌈", cls: "theme-5" },
-      { name: "Castle Quest", icon: "🏰", cls: "theme-1" },
-      { name: "Robot Lab", icon: "🤖", cls: "theme-2" },
-      { name: "Pirate Bay", icon: "🏴‍☠️", cls: "theme-3" },
-      { name: "Superhero City", icon: "🦸", cls: "theme-4" },
-      { name: "Solar System", icon: "🪐", cls: "theme-5" }
+      { name: "Nature Forest", icon: "🌳", cls: "theme-1", scene: "🌳 🦉 🍄 🌿", page: "#edf8ff", card: "#ffffff", line: "#cce3f4", glow: "rgba(17, 112, 173, 0.15)", accent: "#11609c" },
+      { name: "Safari Animals", icon: "🦁", cls: "theme-2", scene: "🦁 🐘 🦒 🌞", page: "#fff7e7", card: "#fffdf7", line: "#f3dba5", glow: "rgba(170, 114, 12, 0.18)", accent: "#a26402" },
+      { name: "Ocean Friends", icon: "🐬", cls: "theme-3", scene: "🐬 🐢 🐠 🌊", page: "#ecfffb", card: "#fbfffe", line: "#bfeee2", glow: "rgba(10, 137, 116, 0.15)", accent: "#0d8a70" },
+      { name: "Dinosaur Land", icon: "🦕", cls: "theme-4", scene: "🦕 🌋 🥚 🌴", page: "#fff1f7", card: "#fffafe", line: "#f1cade", glow: "rgba(179, 54, 120, 0.15)", accent: "#a42d70" },
+      { name: "Space Mission", icon: "🚀", cls: "theme-5", scene: "🚀 🌙 ⭐ 🛸", page: "#f2efff", card: "#fcfbff", line: "#d8d0ff", glow: "rgba(84, 74, 171, 0.18)", accent: "#5040b0" },
+      { name: "Sky Aircraft", icon: "✈️", cls: "theme-1", scene: "✈️ ☁️ 🌤️ 🪁", page: "#eef8ff", card: "#ffffff", line: "#cbe2f4", glow: "rgba(20, 123, 173, 0.15)", accent: "#18679c" },
+      { name: "Jungle Adventure", icon: "🐒", cls: "theme-2", scene: "🐒 🦜 🍌 🌴", page: "#fff8e8", card: "#fffdf8", line: "#efddab", glow: "rgba(166, 125, 8, 0.18)", accent: "#996900" },
+      { name: "Farm Day", icon: "🚜", cls: "theme-3", scene: "🚜 🐄 🌽 🐓", page: "#effff0", card: "#fcfffc", line: "#cfeccf", glow: "rgba(63, 138, 58, 0.16)", accent: "#2c8a36" },
+      { name: "Arctic Animals", icon: "🐧", cls: "theme-4", scene: "🐧 ❄️ 🐻‍❄️ 🧊", page: "#eef9ff", card: "#fbfeff", line: "#c9e5f5", glow: "rgba(36, 126, 173, 0.15)", accent: "#1c76a3" },
+      { name: "Rainbow World", icon: "🌈", cls: "theme-5", scene: "🌈 ☁️ 🦄 ✨", page: "#f8f1ff", card: "#fffafe", line: "#e6d2ff", glow: "rgba(130, 74, 180, 0.18)", accent: "#8142c0" },
+      { name: "Castle Quest", icon: "🏰", cls: "theme-1", scene: "🏰 🛡️ 👑 🐉", page: "#eef4ff", card: "#fdfeff", line: "#d1ddfa", glow: "rgba(65, 98, 176, 0.15)", accent: "#3758a3" },
+      { name: "Robot Lab", icon: "🤖", cls: "theme-2", scene: "🤖 ⚙️ 🔋 💡", page: "#f6f7ff", card: "#fcfcff", line: "#d8daf6", glow: "rgba(100, 108, 176, 0.17)", accent: "#4450b5" },
+      { name: "Pirate Bay", icon: "🏴‍☠️", cls: "theme-3", scene: "🏴‍☠️ ⚓ 🗺️ 🐚", page: "#edfbff", card: "#faffff", line: "#c8ebf4", glow: "rgba(17, 129, 150, 0.16)", accent: "#0f7589" },
+      { name: "Superhero City", icon: "🦸", cls: "theme-4", scene: "🦸 🏙️ ⚡ 🛡️", page: "#fff0f5", card: "#fffcfe", line: "#f2cee0", glow: "rgba(184, 67, 130, 0.17)", accent: "#af2b79" },
+      { name: "Solar System", icon: "🪐", cls: "theme-5", scene: "🪐 ☀️ 🌌 ⭐", page: "#f1f0ff", card: "#fcfcff", line: "#d7d4ff", glow: "rgba(90, 78, 177, 0.18)", accent: "#5749b7" }
+    ];
+
+    const inspiration = [
+      { title: "Quote", text: "“Tiny steps every day build giant math powers.”" },
+      { title: "Mini Story", text: "Milo solved one puzzle before breakfast and said, “My brain just did a happy jump!”" },
+      { title: "Quote", text: "“Mistakes are clues that help us find smarter answers.”" },
+      { title: "Mini Story", text: "A dinosaur counted 3 leaves, then 3 more, and roared, “I can multiply!”" },
+      { title: "Quote", text: "“Curious kids become clever problem solvers.”" },
+      { title: "Mini Story", text: "A pilot practiced numbers daily and soon could map every cloud route." },
+      { title: "Quote", text: "“When learning feels hard, your brain is growing strong.”" },
+      { title: "Mini Story", text: "On the farm, Mia grouped eggs in rows and discovered patterns everywhere." },
+      { title: "Quote", text: "“Be brave enough to try, and smart enough to try again.”" },
+      { title: "Mini Story", text: "In Rainbow World, Kai fixed a tricky sum and shouted, “I did it!”" },
+      { title: "Quote", text: "“Practice turns ‘I can’t yet’ into ‘I can now.’”" },
+      { title: "Mini Story", text: "A robot kept testing ideas until the right answer beeped on screen." },
+      { title: "Quote", text: "“Think, test, and explore—math is an adventure.”" },
+      { title: "Mini Story", text: "A superhero used place value to save time and solve faster." },
+      { title: "Quote", text: "“Your effort is your superpower.”" }
     ];
 
     function seq(start, step, len) {
@@ -467,7 +529,31 @@
       categoryIndex: 0
     };
 
+    function applyTheme(theme) {
+      const headers = {
+        "theme-1": "linear-gradient(135deg, #dff4ff, #eef8ff)",
+        "theme-2": "linear-gradient(135deg, #fff4da, #fff9eb)",
+        "theme-3": "linear-gradient(135deg, #f2ffe6, #f7ffef)",
+        "theme-4": "linear-gradient(135deg, #ffe7f1, #fff1f7)",
+        "theme-5": "linear-gradient(135deg, #ebe9ff, #f4f3ff)"
+      };
+      document.documentElement.style.setProperty("--theme-page", theme.page);
+      document.documentElement.style.setProperty("--theme-card", theme.card);
+      document.documentElement.style.setProperty("--theme-line", theme.line);
+      document.documentElement.style.setProperty("--theme-glow", theme.glow);
+      document.documentElement.style.setProperty("--theme-accent", theme.accent);
+      document.documentElement.style.setProperty("--theme-header", headers[theme.cls] || headers["theme-1"]);
+    }
+
     function renderIndex() {
+      applyTheme({
+        page: "#f5f8ff",
+        card: "#ffffff",
+        line: "#d8e1f2",
+        glow: "rgba(15, 23, 42, 0.07)",
+        accent: "#1d4ed8",
+        cls: "theme-1"
+      });
       indexView.classList.remove("hidden");
       dayView.classList.add("hidden");
       homeBtn.classList.add("hidden");
@@ -507,6 +593,8 @@
       const sessionObj = d.sessions[state.session];
       const catName = categoryOrder[state.categoryIndex];
       const qs = sessionObj.categories[catName];
+      const dayInspiration = inspiration[d.day - 1];
+      applyTheme(d.theme);
 
       indexView.classList.add("hidden");
       dayView.classList.remove("hidden");
@@ -516,7 +604,13 @@
         <div class="day-header ${d.theme.cls}">
           <h2>Day ${d.day} ${d.theme.icon} — ${d.theme.name}</h2>
           <p>${d.note}</p>
+          <div class="scene" aria-hidden="true">${d.theme.scene}</div>
         </div>
+
+        <article class="story-card">
+          <h3>${dayInspiration.title} to Start the Day ✨</h3>
+          <p>${dayInspiration.text}</p>
+        </article>
 
         <div class="controls">
           <button class="select-btn ${state.session === "morning" ? "active" : ""}" data-session="morning">Morning Session</button>
