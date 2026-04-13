@@ -1,11 +1,12 @@
 import { getSessionProgress } from './progress.js';
+import { STATUS } from '../content/config.js';
 
 export const startTimer = (state, day, session, section) => {
   state.timerState = { isRunning: true, startedAt: Date.now(), day, session, section };
   state.activeDay = day;
   state.activeSession = session;
   state.activeSection = section;
-  getSessionProgress(state, day, session).sections[section].status = 'in_progress';
+  getSessionProgress(state, day, session).sections[section].status = STATUS.IN_PROGRESS;
 };
 
 export const stopTimer = (state) => {

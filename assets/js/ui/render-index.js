@@ -1,4 +1,4 @@
-import { TOTAL_DAYS } from '../content/config.js';
+import { TOTAL_DAYS, STATUS } from '../content/config.js';
 import { getDayConfig } from '../content/question-bank.js';
 import { getDayUrl } from '../content/generators.js';
 import { getDayProgress } from '../state.js';
@@ -30,7 +30,7 @@ export const renderIndexPage = (state) => {
   for (let day = 1; day <= TOTAL_DAYS; day += 1) {
     const cfg = getDayConfig(day);
     const progress = getDayProgress(state, day);
-    const status = progress.dayCompleted ? 'complete' : progress.totalSeconds > 0 ? 'in-progress' : 'not-started';
+    const status = progress.dayCompleted ? STATUS.COMPLETED : progress.totalSeconds > 0 ? STATUS.IN_PROGRESS : STATUS.NOT_STARTED;
     const card = document.createElement('a');
     card.href = getDayUrl(day);
     card.className = `card day-card day-card--${status}`;

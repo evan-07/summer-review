@@ -12,3 +12,9 @@
 .summary-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.summary-item{border:1px solid var(--line);padding:8px;border-radius:10px}
 .table-wrap{overflow-x:auto} table{width:100%;border-collapse:collapse;font-size:.8rem} th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left}
 .trend-svg{width:100%;height:120px}
+.day-card--not_started{opacity:.75}
+.day-card--in_progress{border-left:4px solid var(--accent)}
+.day-card--completed{border-left:4px solid var(--ok)}
+.pill.not_started{background:#f0f0f0}
+.chip{display:inline-block;font-size:.7rem;background:#e8edff;color:var(--accent);border-radius:999px;padding:2px 8px;margin-top:4px}
+.muted{color:var(--muted);font-size:.85rem;margin:4px 0}

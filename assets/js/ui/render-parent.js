@@ -7,18 +7,18 @@ export const renderParentPage = (state) => {
   const tbody = document.querySelector('[data-history-body]');
   const summary = document.querySelector('[data-parent-summary]');
   const clearBtn = document.querySelector('[data-clear-parent-scores]');
-  const filters = {
-    day: document.querySelector('[data-filter-day]'),
+  const filterEls = {
+    day:     document.querySelector('[data-filter-day]'),
     session: document.querySelector('[data-filter-session]'),
     section: document.querySelector('[data-filter-section]'),
-    source: document.querySelector('[data-filter-source]')
+    source:  document.querySelector('[data-filter-source]')
   };
   let editId = null;
 
   const dayOptions = Array.from({ length: TOTAL_DAYS }, (_, i) => `<option value="${i + 1}">Day ${i + 1}</option>`).join('');
   document.querySelector('[data-day-options]').innerHTML = dayOptions;
-  filters.day.innerHTML += dayOptions;
-  filters.section.innerHTML += CATEGORY_ORDER.map((s) => `<option>${s}</option>`).join('');
+  filterEls.day.innerHTML += dayOptions;
+  filterEls.section.innerHTML += CATEGORY_ORDER.map((s) => `<option>${s}</option>`).join('');
 
   const renderTrends = (rows) => {
     const svg = document.querySelector('[data-score-trend]');
@@ -29,7 +29,7 @@ export const renderParentPage = (state) => {
   };
 
   const rerender = () => {
-    const rows = filterScores(state.parentScores, Object.fromEntries(Object.entries(filters).map(([k, el]) => [k, el.value])));
+    const rows = filterScores(state.parentScores, Object.fromEntries(Object.entries(filterEls).map(([k, el]) => [k, el.value])));
     const avg = rows.length ? Math.round(rows.reduce((s, r) => s + r.percentage, 0) / rows.length) : 0;
     const recent = rows.slice().sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))[0];
     const totalTime = rows.reduce((s, r) => s + (Number(r.timeSeconds) || 0), 0);
@@ -70,7 +70,7 @@ export const renderParentPage = (state) => {
     }
   };
 
-  Object.values(filters).forEach((el) => (el.onchange = rerender));
+  Object.values(filterEls).forEach((el) => (el.onchange = rerender));
   if (clearBtn) {
     clearBtn.onclick = () => {
       if (!window.confirm('Clear all saved parent score history?')) return;

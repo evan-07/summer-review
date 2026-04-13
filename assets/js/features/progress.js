@@ -1,4 +1,4 @@
-import { CATEGORY_ORDER, SESSION_KEYS } from '../content/config.js';
+import { CATEGORY_ORDER, SESSION_KEYS, STATUS } from '../content/config.js';
 import { getDayProgress } from '../state.js';
 
 export const getSessionProgress = (state, day, session) => getDayProgress(state, day)[session];
@@ -6,7 +6,7 @@ export const getSessionProgress = (state, day, session) => getDayProgress(state,
 export const recalcSession = (state, day, session) => {
   const current = getSessionProgress(state, day, session);
   current.totalSeconds = CATEGORY_ORDER.reduce((sum, c) => sum + current.sections[c].totalSeconds, 0);
-  current.completed = CATEGORY_ORDER.every((c) => current.sections[c].status === 'completed');
+  current.completed = CATEGORY_ORDER.every((c) => current.sections[c].status === STATUS.COMPLETED);
   return current;
 };
 
@@ -21,6 +21,6 @@ export const recalcDay = (state, day) => {
 };
 
 export const markSectionCompleted = (state, day, session, section) => {
-  getSessionProgress(state, day, session).sections[section].status = 'completed';
+  getSessionProgress(state, day, session).sections[section].status = STATUS.COMPLETED;
   recalcDay(state, day);
 };

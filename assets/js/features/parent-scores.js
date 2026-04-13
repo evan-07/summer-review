@@ -1,8 +1,10 @@
+import { SCORE_ID_PREFIX } from '../content/config.js';
+
 export const calcPercentage = (score, maxScore) => (maxScore ? Math.round((Number(score) / Number(maxScore)) * 100) : 0);
 
 export const saveParentScore = (state, entry) => {
   const now = new Date().toISOString();
-  const row = { ...entry, id: entry.id || `score-${Date.now()}`, percentage: calcPercentage(entry.score, entry.maxScore), updatedAt: now, recordedAt: entry.recordedAt || now };
+  const row = { ...entry, id: entry.id || `${SCORE_ID_PREFIX}${Date.now()}`, percentage: calcPercentage(entry.score, entry.maxScore), updatedAt: now, recordedAt: entry.recordedAt || now };
   state.parentScores.push(row);
   return row;
 };

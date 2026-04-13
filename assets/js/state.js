@@ -1,6 +1,6 @@
-import { CATEGORY_ORDER, SESSION_KEYS } from './content/config.js';
+import { CATEGORY_ORDER, SESSION_KEYS, STATUS } from './content/config.js';
 
-const createSection = () => ({ status: 'not_started', totalSeconds: 0 });
+const createSection = () => ({ status: STATUS.NOT_STARTED, totalSeconds: 0 });
 const createSession = () => ({ completed: false, sections: Object.fromEntries(CATEGORY_ORDER.map((c) => [c, createSection()])), totalSeconds: 0 });
 
 export const createDefaultState = () => ({

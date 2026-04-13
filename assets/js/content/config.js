@@ -57,3 +57,19 @@ export const DAY_NOTES = [
   '3-digit by 2-digit and stretch work',
   '3-digit by 2-digit and stretch work'
 ];
+
+// Canonical status values — underscore format matches existing CSS pill rules
+export const STATUS = {
+  NOT_STARTED: 'not_started',
+  IN_PROGRESS:  'in_progress',
+  COMPLETED:    'completed'
+};
+
+// Score source types for parentScores entries
+export const SCORE_SOURCE = {
+  REQUIRED: 'required',
+  BONUS:    'bonus'
+};
+
+// Prefix for auto-generated parentScore IDs
+export const SCORE_ID_PREFIX = 'score-';

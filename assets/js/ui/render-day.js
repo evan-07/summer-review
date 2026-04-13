@@ -1,4 +1,4 @@
-import { CATEGORY_ORDER, TOTAL_DAYS } from '../content/config.js';
+import { CATEGORY_ORDER, TOTAL_DAYS, STATUS, SCORE_SOURCE, SESSION_KEYS } from '../content/config.js';
 import { getBonusQuestions } from '../content/bonus-generators.js';
 import { parseDayFromSearch, getDayUrl } from '../content/generators.js';
 import { getDayConfig, getRequiredQuestions } from '../content/question-bank.js';
@@ -58,7 +58,7 @@ export const renderDayPage = (state) => {
       const nextAttempt = attempts.length + 1;
       if (nextAttempt > 3) return;
       const questions = getBonusQuestions({ day, session, category: section, attempt: nextAttempt });
-      const entry = { day, session, category: section, attempt: nextAttempt, source: 'bonus', generatedAt: new Date().toISOString(), questions };
+      const entry = { day, session, section, attempt: nextAttempt, source: SCORE_SOURCE.BONUS, generatedAt: new Date().toISOString(), questions };
       state.bonusAttempts[bonusKey] = [...attempts, entry];
       saveState(state);
       renderSection();
@@ -88,7 +88,7 @@ export const renderDayPage = (state) => {
     const pills = document.querySelector('[data-section-pills]');
     pills.innerHTML = CATEGORY_ORDER.map((c) => {
       const st = dayProgress[session].sections[c].status;
-      const badge = st === 'completed' ? '✓' : st === 'in_progress' ? 'In progress' : 'Ready';
+      const badge = st === STATUS.COMPLETED ? '✓' : st === STATUS.IN_PROGRESS ? 'In progress' : 'Ready';
       return `<button class="pill ${st}" data-section="${c}">${c}<span>${badge}</span></button>`;
     }).join('');
     pills.querySelectorAll('[data-section]').forEach((btn) => {
@@ -100,7 +100,7 @@ export const renderDayPage = (state) => {
     btn.onclick = () => {
       session = btn.dataset.startSession;
       section = CATEGORY_ORDER[0];
-      document.querySelector('[data-session-title]').textContent = `${session === 'morning' ? 'Morning' : 'Afternoon'} Session`;
+      document.querySelector('[data-session-title]').textContent = `${session === SESSION_KEYS[0] ? 'Morning' : 'Afternoon'} Session`;
       startTimer(state, day, session, section);
       saveState(state);
       renderSection();
