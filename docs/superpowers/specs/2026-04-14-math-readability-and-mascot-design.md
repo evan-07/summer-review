@@ -96,8 +96,8 @@ Each of the 15 day themes maps to a small SVG `<g>` overlay (hat, accessory) tha
 | Method | Trigger | Animation |
 |---|---|---|
 | `mascot.react('wave')` | Morning/Afternoon session button clicked | Arm waves up once |
-| `mascot.react('bounce')` | "Next Section" or "Get 5 More" clicked | Character bounces up and lands |
-| `mascot.react('cheer')` | Section completed | Jumps with arms up, confetti contained in card area |
+| `mascot.react('bounce')` | "Next Section" clicked (not last section) or "Get 5 More" clicked | Character bounces up and lands |
+| `mascot.react('cheer')` | "Finish Session" clicked (last section of a session complete) | Jumps with arms up, confetti contained in card area |
 | `mascot.celebrate()` | Day marked complete | Full-screen overlay: large mascot + falling confetti + "Amazing job!" + dismiss button |
 
 ### Layout
@@ -126,7 +126,7 @@ The mascot wrapper is `position: fixed; bottom: 16px; right: 16px` — stays vis
 
 ### Unchanged Files
 
-`index.html`, `parent.html`, `question-bank.js`, `config.js`, `state.js`, `storage.js`, `storage.js`, `bonus-generators.js`, `generators.js`, `progress.js`, `timer.js`, `router.js`, `render-index.js`, `render-parent.js`
+`index.html`, `parent.html`, `question-bank.js`, `config.js`, `state.js`, `storage.js`, `bonus-generators.js`, `generators.js`, `progress.js`, `timer.js`, `router.js`, `render-index.js`, `render-parent.js`
 
 ---
 
