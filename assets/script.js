@@ -55,6 +55,16 @@
   ];
 
   const ui = { day: null, session: null, section: null, reviewMode: false, intervalId: null, mascotIdx: 0 };
+  function clampDay(day) {
+    const n = Number(day);
+    if (!Number.isFinite(n)) return 1;
+    return Math.min(TOTAL_DAYS, Math.max(1, Math.floor(n)));
+  }
+
+  function setText(selector, value) {
+    const el = document.querySelector(selector);
+    if (el) el.textContent = value;
+  }
 
   function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -451,7 +461,7 @@
     if (!content) return;
 
     const listItems = questions.map((q) => `<li>${sectionName === "Pattern Recognition" || /stretch/i.test(q) ? formatPattern(q) : q}</li>`).join("");
-    content.innerHTML = `<section class="card question-card"><h3>${sectionName}</h3><ol>${listItems}</ol><div class="row"><button class="btn" data-retry-section data-animate="button">Retry Section</button><button class="btn btn-primary" data-next-section data-animate="button">${sectionName === "Problem Solving" ? "Finish Session" : "Next Section"}</button></div></section><p class="notice" data-encouragement></p><p class="reward-feedback hidden" data-reward-feedback></p>`;
+    content.innerHTML = `<section class="card question-card"><h3>${sectionName}</h3><ol>${listItems}</ol><div class="button-row button-group button-group--split button-group--stack-mobile"><button class="btn" data-retry-section data-animate="button">Retry Section</button><button class="btn btn-primary" data-next-section data-animate="button">${sectionName === "Problem Solving" ? "Finish Session" : "Next Section"}</button></div></section><p class="notice" data-encouragement></p><p class="reward-feedback hidden" data-reward-feedback></p>`;
 
     renderSectionProgressPills(state, dayObj.day, sessionKey);
     renderTimerCard(state, dayObj.day, sessionKey, sectionName);
@@ -527,20 +537,33 @@
     const done = document.querySelector("[data-done-count]");
     const active = document.querySelector("[data-active-day]");
     const total = document.querySelector("[data-total-time]");
+    const continueWrap = document.querySelector("[data-continue-day]");
 
-    done.textContent = `${state.doneDays.length} / ${TOTAL_DAYS}`;
-    active.textContent = state.activeDay ? `Day ${state.activeDay}` : "None yet";
+    if (done) done.textContent = `${state.doneDays.length} / ${TOTAL_DAYS}`;
+    if (active) active.textContent = state.activeDay ? `Day ${state.activeDay}` : "None yet";
     const totalSecs = Object.values(state.progress).reduce((s, d) => s + (d.totalSeconds || 0), 0);
-    total.textContent = formatDuration(totalSecs);
+    if (total) total.textContent = formatDuration(totalSecs);
+    if (continueWrap) {
+      const activeDay = clampDay(state.activeDay);
+      const activeProgress = state.activeDay ? getDayProgress(state, activeDay) : null;
+      const shouldShowContinue = activeProgress && !activeProgress.dayCompleted;
+      continueWrap.innerHTML = shouldShowContinue
+        ? `<a class="card day-card continue-card" href="${dayLink(activeDay)}" data-animate="card"><h3>Continue Day ${activeDay}</h3><p>Jump back into your in-progress practice.</p><span class="chip">Resume</span></a>`
+        : "";
+    }
 
+    if (!grid) return;
     grid.innerHTML = "";
     for (let day = 1; day <= TOTAL_DAYS; day++) {
       const d = dayData(day);
+      const dayProgress = getDayProgress(state, day);
+      const status = dayProgress.dayCompleted ? "complete" : dayProgress.totalSeconds > 0 ? "in-progress" : "not-started";
+      const statusText = status === "complete" ? "Complete" : status === "in-progress" ? "In Progress" : "Not Started";
       const card = document.createElement("a");
       card.href = dayLink(day);
       card.dataset.animate = "card";
-      card.className = `card day-card ${d.theme.className}`;
-      card.innerHTML = `<h3>Day ${day} ${d.theme.icon}</h3><p>${d.note}</p><span class="chip">${d.theme.name}</span>`;
+      card.className = `card day-card day-card--${status} ${d.theme.className}`;
+      card.innerHTML = `<h3>Day ${day} ${d.theme.icon}</h3><p>${d.note}</p><div class="button-row"><span class="chip">${d.theme.name}</span><span class="chip status-chip status-chip--${status}">${statusText}</span></div>`;
       grid.appendChild(card);
     }
     bindAnimationTargets(document);
@@ -561,16 +584,17 @@
   }
 
   function renderDayPage(day, state) {
+    day = clampDay(day);
     const d = dayData(day);
     document.body.classList.add(d.theme.className);
     renderTracker(day, state.doneDays, "../");
     ensureParentLinks();
-
-    document.querySelector("[data-day-title]").textContent = `Day ${day} ${d.theme.icon} — ${d.theme.name}`;
-    document.querySelector("[data-day-note]").textContent = d.note;
-    document.querySelector("[data-day-inspiration]").textContent = INSPIRATION[day - 1];
+    setText("[data-day-title]", `Day ${day} ${d.theme.icon} — ${d.theme.name}`);
+    setText("[data-day-note]", d.note);
+    setText("[data-day-inspiration]", INSPIRATION[day - 1]);
 
     const jump = document.querySelector("[data-day-jump]");
+    if (!jump) return;
     jump.innerHTML = "";
     for (let i = 1; i <= TOTAL_DAYS; i++) {
       const o = document.createElement("option");
@@ -584,11 +608,10 @@
     document.querySelector("[data-prev-day]").href = day > 1 ? dayLink(day - 1) : dayLink(1);
     document.querySelector("[data-next-day]").href = day < 15 ? dayLink(day + 1) : dayLink(15);
 
-    const startDay = document.querySelector("[data-start-day]");
-    startDay.dataset.animate = "button";
     const sessionPanel = document.querySelector("[data-session-panel]");
     const summaryWrap = document.querySelector("[data-session-summary]");
-    summaryWrap.innerHTML = "";
+    if (summaryWrap) summaryWrap.innerHTML = "";
+    if (sessionPanel) sessionPanel.classList.remove("hidden");
 
     renderResumePrompt(state, day);
     renderParentSnapshot(state, day);
@@ -599,7 +622,7 @@
       banner.setAttribute("data-encouragement-banner", "");
       banner.textContent = MASCOT_REACTIONS[0];
       const hero = document.querySelector(".hero");
-      hero.parentNode.insertBefore(banner, hero.nextSibling);
+      if (hero && hero.parentNode) hero.parentNode.insertBefore(banner, hero.nextSibling);
     }
     if (!document.querySelector("[data-parent-dashboard-cta]")) {
       const cta = document.createElement("section");
@@ -607,7 +630,7 @@
       cta.setAttribute("data-parent-dashboard-cta", "");
       cta.innerHTML = "<h3>For Parents</h3><p>Track scores, notes, and trends in one place.</p><a class=\"btn btn-primary\" href=\"../parent.html\">Parent Dashboard</a>";
       const parentPanel = document.querySelector("[data-parent-panel]");
-      parentPanel.parentNode.insertBefore(cta, parentPanel);
+      if (parentPanel && parentPanel.parentNode) parentPanel.parentNode.insertBefore(cta, parentPanel);
     }
     renderMascotReaction();
 
@@ -620,21 +643,14 @@
         ui.reviewMode = false;
         startSectionTimer(day, key, firstSection, state);
         renderSession(state, d, key, firstSection);
-        summaryWrap.innerHTML = "";
-        document.querySelector("[data-session-title]").textContent = `${key === "morning" ? "Morning" : "Afternoon"} Session`;
+        if (summaryWrap) summaryWrap.innerHTML = "";
+        setText("[data-session-title]", `${key === "morning" ? "Morning" : "Afternoon"} Session`);
       });
     });
 
-    startDay.addEventListener("click", () => {
-      sessionPanel.classList.remove("hidden");
-      startDay.classList.add("hidden");
-      emojiBurst(sessionPanel);
-      playBeep(state, "click");
-    });
-
     const finishBtn = document.querySelector("[data-finish-day-btn]");
-    finishBtn.dataset.animate = "button";
-    finishBtn.addEventListener("click", () => {
+    if (finishBtn) finishBtn.dataset.animate = "button";
+    if (finishBtn) finishBtn.addEventListener("click", () => {
       recalculateDayTotals(state, day);
       if (!isDayComplete(state, day)) {
         alert("Finish Day unlocks after Morning and Afternoon are both complete.");
@@ -642,28 +658,32 @@
       }
       state.rewards.badges.push({ id: `day-badge-${day}-${Date.now()}`, day, session: "both", label: "Day Complete", earnedAt: new Date().toISOString() });
       saveProgress(state);
-      document.querySelector("[data-finish-day-msg]").textContent = "Day complete! Fantastic perseverance!";
+      setText("[data-finish-day-msg]", "Day complete! Fantastic perseverance!");
       emojiBurst(document.querySelector("[data-finish-day]"));
       playBeep(state, "celebrate");
       renderTracker(day, state.doneDays, "../");
     });
 
     const soundToggle = document.querySelector("[data-sound-toggle]");
-    soundToggle.checked = state.soundOn;
-    soundToggle.addEventListener("change", () => { state.soundOn = soundToggle.checked; saveProgress(state); });
+    if (soundToggle) {
+      soundToggle.checked = state.soundOn;
+      soundToggle.addEventListener("change", () => { state.soundOn = soundToggle.checked; saveProgress(state); });
+    }
 
     const parentToggle = document.querySelector("[data-parent-toggle]");
     const parentPanel = document.querySelector("[data-parent-panel]");
-    parentToggle.addEventListener("change", () => parentPanel.classList.toggle("hidden", !parentToggle.checked));
+    if (parentToggle && parentPanel) parentToggle.addEventListener("change", () => parentPanel.classList.toggle("hidden", !parentToggle.checked));
 
     const focusToggle = document.querySelector("[data-focus-toggle]");
-    focusToggle.checked = state.focusMode;
-    document.body.classList.toggle("focus-mode", state.focusMode);
-    focusToggle.addEventListener("change", () => {
-      state.focusMode = focusToggle.checked;
+    if (focusToggle) {
+      focusToggle.checked = state.focusMode;
       document.body.classList.toggle("focus-mode", state.focusMode);
-      saveProgress(state);
-    });
+      focusToggle.addEventListener("change", () => {
+        state.focusMode = focusToggle.checked;
+        document.body.classList.toggle("focus-mode", state.focusMode);
+        saveProgress(state);
+      });
+    }
 
     bindAnimationTargets(document);
     window.addEventListener("beforeunload", () => pauseActiveTimer(state));
@@ -689,6 +709,6 @@
     const state = loadProgress();
     const page = document.body.dataset.page;
     if (page === "index") renderIndex(state);
-    if (page === "day") renderDayPage(Number(document.body.dataset.day), state);
+    if (page === "day") renderDayPage(clampDay(document.body.dataset.day), state);
   });
 })();
