@@ -1,0 +1,12 @@
+:root {
+  --bg: #f4f8ff;
+  --card: #fff;
+  --ink: #23324d;
+  --muted: #4f5f80;
+  --line: #d7e1f5;
+  --accent: #2d6df6;
+  --ok: #20a84a;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --tap: 46px;
+}

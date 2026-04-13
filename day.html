@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day • Grade 2 Math Adventure</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body data-page="day">
+  <header class="top-nav">
+    <div class="nav-left button-group button-group--stack-mobile">
+      <a class="btn" href="index.html">🏠 Home</a>
+      <a class="btn" data-prev-day href="#">← Previous Day</a>
+      <a class="btn" data-next-day href="#">Next Day →</a>
+    </div>
+    <div class="nav-right">
+      <label>Go to Day: <select data-day-jump></select></label>
+      <a class="btn" data-parent-link href="parent.html">Parent Dashboard</a>
+    </div>
+  </header>
+  <main class="container">
+    <nav class="progress-tracker" data-progress-tracker aria-label="Day Progress"></nav>
+    <section class="card hero">
+      <h1 data-day-title></h1>
+      <p data-day-note></p>
+      <p><strong>Start with this:</strong> <span data-day-inspiration></span></p>
+      <div class="session-buttons">
+        <button class="btn btn-primary" data-start-session="morning">Morning Session</button>
+        <button class="btn btn-primary" data-start-session="afternoon">Afternoon Session</button>
+      </div>
+    </section>
+    <section class="card" data-session-panel>
+      <h2 data-session-title>Choose a session to begin</h2>
+      <div class="pills" data-section-pills></div>
+      <div data-session-content></div>
+    </section>
+    <section class="card hidden" data-finish-day>
+      <h3>🏁 Finish Day</h3>
+      <p data-finish-day-msg>Complete both sessions first.</p>
+      <button class="btn btn-primary" data-finish-day-btn>Mark Day Complete</button>
+    </section>
+  </main>
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
