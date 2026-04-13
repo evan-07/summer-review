@@ -29,4 +29,8 @@ describe('renderMath', () => {
     const q = 'A class has 20 students and 5 join. How many now?';
     expect(renderMath(q)).toBe(q);
   });
+
+  test('does not wrap hyphens in non-operator context', () => {
+    expect(renderMath('non-operator-5')).toBe('non-operator-5');
+  });
 });
