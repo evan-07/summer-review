@@ -7,6 +7,7 @@ import { markSectionCompleted, recalcDay } from '../features/progress.js';
 import { startTimer, stopTimer } from '../features/timer.js';
 import { saveState } from '../storage.js';
 import { formatDuration, renderTracker } from './components.js';
+import { renderMath } from './math-renderer.js';
 
 export const renderDayPage = (state) => {
   const day = parseDayFromSearch(window.location.search);
@@ -80,9 +81,9 @@ export const renderDayPage = (state) => {
     const bonusKey = `${day}-${session}-${section}`;
     const attempts = state.bonusAttempts[bonusKey] || [];
 
-    sectionWrap.innerHTML = `<section class="card"><h3>${section}</h3><ol>${required.map((q) => `<li>${q}</li>`).join('')}</ol>
+    sectionWrap.innerHTML = `<section class="card"><h3>${section}</h3><ol>${required.map((q) => `<li>${renderMath(q)}</li>`).join('')}</ol>
       <button class="btn btn-secondary" data-get-bonus>Get 5 More</button><p class="muted">Optional extra practice</p>
-      <div class="bonus-area">${attempts.map((a) => `<article class="bonus-panel"><h4>Bonus Round ${a.attempt}</h4><ol>${a.questions.map((q) => `<li>${q}</li>`).join('')}</ol></article>`).join('')}</div>
+      <div class="bonus-area">${attempts.map((a) => `<article class="bonus-panel"><h4>Bonus Round ${a.attempt}</h4><ol>${a.questions.map((q) => `<li>${renderMath(q)}</li>`).join('')}</ol></article>`).join('')}</div>
       <div class="button-row"><button class="btn btn-primary" data-next>${section === 'Problem Solving' ? 'Finish Session' : 'Next Section'}</button></div></section>`;
 
     sectionWrap.querySelector('[data-get-bonus]').onclick = () => {
