@@ -8,6 +8,7 @@ import { startTimer, stopTimer } from '../features/timer.js';
 import { saveState } from '../storage.js';
 import { formatDuration, renderTracker } from './components.js';
 import { renderMath } from './math-renderer.js';
+import { createMascot } from './mascot.js';
 
 export const renderDayPage = (state) => {
   const day = parseDayFromSearch(window.location.search);
@@ -20,6 +21,7 @@ export const renderDayPage = (state) => {
   let session = state.activeSession || 'morning';
   let section = state.activeSection || CATEGORY_ORDER[0];
   let timerInterval = null;
+  const mascot = createMascot(day);
 
   document.body.classList.add(cfg.theme.className);
   document.querySelector('[data-day-title]').textContent = `Day ${day} ${cfg.theme.icon} \u2014 ${cfg.theme.name}`;
@@ -94,6 +96,7 @@ export const renderDayPage = (state) => {
       state.bonusAttempts[bonusKey] = [...attempts, entry];
       saveState(state);
       renderSection();
+      mascot.react('bounce');
     };
 
     sectionWrap.querySelector('[data-next]').onclick = () => {
@@ -113,6 +116,8 @@ export const renderDayPage = (state) => {
       renderSessionTimer();
       if (dayProgress.dayCompleted) document.querySelector('[data-finish-day]').classList.remove('hidden');
       renderPills();
+      if (idx < CATEGORY_ORDER.length - 1) mascot.react('bounce');
+      else mascot.react('cheer');
     };
   };
 
@@ -138,6 +143,7 @@ export const renderDayPage = (state) => {
       renderSection();
       renderPills();
       restartTimerTicker();
+      mascot.react('wave');
     };
   });
 
@@ -145,7 +151,10 @@ export const renderDayPage = (state) => {
     recalcDay(state, day);
     const complete = getDayProgress(state, day).dayCompleted;
     document.querySelector('[data-finish-day-msg]').textContent = complete ? 'Day complete! Fantastic perseverance!' : 'Complete both sessions first.';
-    if (complete) saveState(state);
+    if (complete) {
+      saveState(state);
+      mascot.celebrate();
+    }
   };
 
   document.querySelector('[data-parent-link]').href = 'parent.html';
