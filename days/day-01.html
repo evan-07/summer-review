@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Day 1 • Grade 2 Math Adventure</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body data-page="day" data-day="1">
+  <header class="top-nav">
+    <div class="nav-left">
+      <a class="btn" href="../index.html">🏠 Home</a>
+      <a class="btn" data-prev-day href="#">← Previous Day</a>
+      <a class="btn" data-next-day href="#">Next Day →</a>
+    </div>
+    <div class="nav-right">
+      <label>Go to Day:
+        <select data-day-jump></select>
+      </label>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="progress-tracker" data-progress-tracker aria-label="Day Progress"></nav>
+
+    <section class="card hero">
+      <h1 data-day-title></h1>
+      <p data-day-note></p>
+      <p><strong>Start with this:</strong> <span data-day-inspiration></span> ✨</p>
+      <button class="btn btn-primary" data-start-day>Start Day</button>
+    </section>
+
+    <section class="card hidden" data-session-panel>
+      <div class="session-buttons">
+        <button class="btn btn-primary" data-start-session="morning">Start Morning Session</button>
+        <button class="btn btn-primary" data-start-session="afternoon">Start Afternoon Session</button>
+      </div>
+
+      <h2 data-session-title>Choose a session to begin</h2>
+      <div data-session-content></div>
+      <div class="notice" data-encouragement></div>
+
+      <div class="finish hidden" data-finish-day>
+        <h3>🎉 You're done!</h3>
+        <p data-done-message>Tap below when today's work is complete on paper.</p>
+        <button class="btn btn-primary" data-mark-done>Finish Day</button>
+      </div>
+    </section>
+
+    <section class="card" data-parent-toggle-wrap>
+      <label><input type="checkbox" data-parent-toggle /> Parent Tips</label>
+      <div class="parent-tips hidden" data-parent-tips>
+        <ul>
+          <li>Encourage counting in groups.</li>
+          <li>Try drawing arrays for multiplication.</li>
+          <li>Ask the child to explain their thinking out loud.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card" data-sound-wrap>
+      <label><input type="checkbox" data-sound-toggle /> Sound Effects (optional)</label>
+      <p class="footer-note">No autoplay. Sound only plays after taps.</p>
+    </section>
+  </main>
+
+  <script src="../assets/script.js"></script>
+</body>
+</html>
