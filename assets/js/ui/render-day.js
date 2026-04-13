@@ -33,8 +33,22 @@ export const renderDayPage = (state) => {
     const locked = !isDayUnlocked(d, state);
     return `<option value="${d}" ${d === day ? 'selected' : ''} ${locked ? 'disabled' : ''}>${locked ? '\u{1F512} ' : ''}Day ${d}</option>`;
   }).join('');
-  jump.onchange = () => { window.location.href = getDayUrl(jump.value); };
-  document.querySelector('[data-prev-day]').href = getDayUrl(day - 1);
+  jump.onchange = () => {
+    const target = Number(jump.value);
+    if (isDayUnlocked(target, state)) {
+      window.location.href = getDayUrl(target);
+    } else {
+      jump.value = day;
+    }
+  };
+  const prevDayEl = document.querySelector('[data-prev-day]');
+  if (day > 1) {
+    prevDayEl.href = getDayUrl(day - 1);
+  } else {
+    prevDayEl.removeAttribute('href');
+    prevDayEl.setAttribute('aria-disabled', 'true');
+    prevDayEl.classList.add('btn--disabled');
+  }
   const nextDayEl = document.querySelector('[data-next-day]');
   const nextDay = day + 1;
   if (nextDay <= TOTAL_DAYS && isDayUnlocked(nextDay, state)) {

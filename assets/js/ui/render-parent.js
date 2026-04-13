@@ -87,6 +87,7 @@ export const renderParentPage = (state) => {
       const preserved = state.parentScores;
       Object.assign(state, createDefaultState());
       state.parentScores = preserved;
+      state.activeDay = null;
       saveState(state);
       window.location.href = 'index.html';
     };
