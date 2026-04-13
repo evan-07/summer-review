@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>15-Day Grade 2 Math Enrichment Plan</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --card: #ffffff;
+      --ink: #1f2937;
+      --muted: #4b5563;
+      --line: #dbe3f0;
+      --accent: #2563eb;
+      --accent-soft: #e8f0ff;
+      --pill: #eef2ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.5;
+      font-size: 20px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(246, 248, 252, 0.95);
+      backdrop-filter: blur(4px);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 14px 10px;
+    }
+
+    .title {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      text-align: center;
+      color: #0f172a;
+    }
+
+    .day-nav {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .day-btn {
+      border: 1px solid #c7d2fe;
+      background: #fff;
+      color: #1e3a8a;
+      border-radius: 12px;
+      padding: 10px 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .day-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    main {
+      max-width: 980px;
+      margin: 16px auto 80px;
+      padding: 0 14px;
+    }
+
+    .day-card {
+      display: none;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 6px 22px rgba(15, 23, 42, 0.06);
+      padding: 16px;
+    }
+
+    .day-card.active { display: block; }
+
+    h2 {
+      margin: 4px 0 8px;
+      font-size: 1.5rem;
+      text-align: center;
+      color: #0b3a8f;
+    }
+
+    .subtitle {
+      margin: 0 0 14px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .session {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 14px;
+      background: #fcfdff;
+    }
+
+    .session h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+      color: #0f4bb3;
+      background: var(--accent-soft);
+      border-radius: 12px;
+      padding: 8px 10px;
+    }
+
+    .category {
+      margin: 10px 0;
+      border-top: 1px dashed #d2dcf5;
+      padding-top: 10px;
+    }
+
+    .category:first-of-type {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .category h4 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      color: #1e3a8a;
+      background: var(--pill);
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    ol {
+      margin: 6px 0 0 28px;
+      padding: 0;
+    }
+
+    li {
+      margin: 8px 0;
+      padding-right: 6px;
+      font-size: 1rem;
+    }
+
+    .pager {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .pager button {
+      flex: 1;
+      border: none;
+      border-radius: 12px;
+      background: #1d4ed8;
+      color: #fff;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .pager button:disabled {
+      background: #a9b8dd;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 640px) {
+      body { font-size: 19px; }
+      .day-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media print {
+      header, .pager { display: none !important; }
+      body { background: #fff; font-size: 14pt; }
+      main { max-width: 100%; margin: 0; padding: 0; }
+      .day-card { display: block !important; page-break-after: always; box-shadow: none; border: none; border-radius: 0; }
+      .session { break-inside: avoid; }
+      h2 { color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="title">Grade 2 Math Enrichment Plan (15 Days)</h1>
+    <nav class="day-nav" id="dayNav" aria-label="Day selector"></nav>
+  </header>
+
+  <main id="content"></main>
+
+  <script>
+    const categoryOrder = ["Easy", "Intermediate", "Pattern Recognition", "Hard", "Problem Solving"];
+
+    function seq(start, step, len) {
+      return Array.from({ length: len }, (_, i) => start + step * i).join(", ") + ", ...";
+    }
+
+    function phase(day) {
+      if (day <= 3) return 1;
+      if (day <= 6) return 2;
+      if (day <= 9) return 3;
+      if (day <= 12) return 4;
+      return 5;
+    }
+
+    function easy(day, session) {
+      const n = day * 2 + session;
+      if (phase(day) === 1) {
+        return [
+          `${8 + n} + ${5 + session}`,
+          `${17 + n} - ${6 + session}`,
+          `${9 + session} + ${9 + day}`,
+          `${20 + n} - ${7 + session}`,
+          `${2 + session} × ${3 + (day % 3)}`
+        ];
+      }
+      if (phase(day) === 2) {
+        return [
+          `${23 + n} + ${14 + session}`,
+          `${56 + n} - ${18 + session}`,
+          `${4 + (day % 4)} × ${6 + session}`,
+          `${31 + n} + ${27 + session}`,
+          `${72 + n} - ${26 + session}`
+        ];
+      }
+      if (phase(day) === 3) {
+        return [
+          `${12 + n} × ${3 + session}`,
+          `${145 + n} - ${18 + session}`,
+          `${36 + n} + ${27 + session}`,
+          `Write the value of the digit 6 in ${160 + day * 7}`,
+          `${220 + n} - ${90 + session}`
+        ];
+      }
+      if (phase(day) === 4) {
+        return [
+          `${14 + n} × ${11 + session}`,
+          `${32 + n} × ${4 + session}`,
+          `Use partial products: (${20 + n} + ${3 + session}) × ${5 + session}`,
+          `${240 + n} - ${85 + session}`,
+          `What is 9 groups of ${12 + n}?`
+        ];
+      }
+      return [
+        `${120 + n} × ${12 + session}`,
+        `${230 + n} × ${11 + session}`,
+        `${340 + n} - ${170 + session}`,
+        `Round ${670 + n} to the nearest hundred.`,
+        `${70 + n} × ${13 + session}`
+      ];
+    }
+
+    function intermediate(day, session) {
+      const n = day + session;
+      if (phase(day) === 1) {
+        return [
+          `${14 + n} + ${18 + day}`,
+          `${37 + n} - ${19 + session}`,
+          `${5 + session} × ${4 + (day % 2)}`,
+          `${22 + n} + ${29 + day}`,
+          `${60 + n} - ${24 + session}`
+        ];
+      }
+      if (phase(day) === 2) {
+        return [
+          `${46 + n} + ${37 + day}`,
+          `${95 + n} - ${48 + session}`,
+          `${7 + session} × ${8 + (day % 2)}`,
+          `${58 + n} + ${26 + day}`,
+          `${84 + n} - ${39 + session}`
+        ];
+      }
+      if (phase(day) === 3) {
+        return [
+          `${23 + n} × ${4 + session}`,
+          `${132 + n} × ${3 + session}`,
+          `Break apart ${48 + n} × ${5 + session} into tens and ones.`,
+          `What number is 300 more than ${245 + n}?`,
+          `${407 + n} - ${129 + session}`
+        ];
+      }
+      if (phase(day) === 4) {
+        return [
+          `${24 + n} × ${13 + session}`,
+          `${35 + n} × ${12 + session}`,
+          `Use distributive property: (${30 + n} + 6) × ${7 + session}`,
+          `${620 + n} - ${287 + session}`,
+          `Find the missing factor: ${144 + n * 2} = ${12 + session} × ?`
+        ];
+      }
+      return [
+        `${214 + n} × ${23 + session}`,
+        `${305 + n} × ${14 + session}`,
+        `${432 + n} + ${289 + day}`,
+        `Estimate ${398 + n} × ${21 + session} by rounding both numbers.`,
+        `${705 + n} - ${268 + session}`
+      ];
+    }
+
+    function pattern(day, session) {
+      const n = day + session;
+      const stage = phase(day);
+      if (stage === 1) {
+        return [
+          `Number pattern: ${seq(2 + n, 2, 4)} What comes next?`,
+          `Shape pattern: ▲ ■ ▲ ■ ${day % 2 === 0 ? "▲" : "■"} __`,
+          `Skip count by 5: ${seq(5 + 5 * session, 5, 4)} What is next?`,
+          `Odd or even pattern: ${3 + n}, ${4 + n}, ${5 + n}, ${6 + n}, ${7 + n}, __. Is the next number odd or even?`,
+          `Object groups: ${"🍎".repeat(2 + session)} | ${"🍎".repeat(3 + session)} | ${"🍎".repeat(4 + session)} | __ (draw or name next group)`
+        ];
+      }
+      if (stage === 2) {
+        return [
+          `Doubling pattern: ${3 + n}, ${6 + n * 2}, ${12 + n * 4}, __`,
+          `Direction pattern: up, down, up, down, ${day % 2 === 0 ? "__" : "up, __"}`,
+          `Shape logic: ● ● ▲ | ● ● ▲ | ● ● ${day % 2 === 0 ? "__" : "▲"}`,
+          `Even numbers only: ${seq(10 + n, 2, 4)} What comes next?`,
+          `Size pattern: small, medium, large, small, medium, ${session === 0 ? "__" : "large"}`
+        ];
+      }
+      if (stage === 3) {
+        return [
+          `Array pattern: 2×3, 3×3, 4×3, 5×3, __`,
+          `Place-value pattern: 120, 130, 140, 150, __`,
+          `Missing number pattern: __, ${24 + n}, ${36 + n}, ${48 + n}, ${60 + n}`,
+          `Mirror pattern: ${session === 0 ? "◀ ▶ ◀ ▶ ◀ __" : "▲ ▼ ▲ ▼ ▲ __"}`,
+          `Grouped objects: (●●) (●●●●) (●●●●●●) __`
+        ];
+      }
+      if (stage === 4) {
+        return [
+          `Scaling pattern: 6, 12, 24, 48, __`,
+          `Rotation pattern: ↑, →, ↓, ←, ↑, __`,
+          `Symmetry check: Which has a line of symmetry? (A) ${session === 0 ? "▲" : "◆"}  (B) ▶  (C) ${session === 0 ? "■" : "L-shape"}`,
+          `Multiplication pattern: 15, 30, 45, 60, __`,
+          `Place-value jump: 205, 305, 405, 505, __`
+        ];
+      }
+      return [
+        `Advanced number pattern: 7, 14, 28, 56, __`,
+        `Shape progression: ▲, ▲▲, ▲▲▲, ▲▲▲▲, __`,
+        `Logic sequence: 2×3, 3×4, 4×5, 5×6, __`,
+        `Multiplication scaling: 25, 50, 100, 200, __`,
+        `Place-value + multiplication pattern: 111, 222, 444, 888, __`
+      ];
+    }
+
+    function hard(day, session) {
+      const n = day + session;
+      const stage = phase(day);
+      if (stage === 1) {
+        return [
+          `${29 + n} + ${34 + day}`,
+          `${81 + n} - ${46 + session}`,
+          `${6 + session} × ${7 + (day % 2)}`,
+          `${43 + n} + ${38 + day}`,
+          `${90 + n} - ${37 + session}`
+        ];
+      }
+      if (stage === 2) {
+        return [
+          `${68 + n} + ${47 + day}`,
+          `${122 + n} - ${59 + session}`,
+          `${9 + session} × ${7 + (day % 3)}`,
+          `${85 + n} - ${46 + session}`,
+          `${57 + n} + ${58 + day}`
+        ];
+      }
+      if (stage === 3) {
+        return [
+          `${47 + n} × ${6 + session}`,
+          `${238 + n} × ${3 + session}`,
+          `${315 + n} - ${147 + session}`,
+          `Find 4 × (${30 + n} + ${8 + session})`,
+          `Write ${604 + n} in expanded form.`
+        ];
+      }
+      if (stage === 4) {
+        return [
+          `${46 + n} × ${17 + session}`,
+          `${58 + n} × ${16 + session}`,
+          `Use partial products for ${39 + n} × ${14 + session}`,
+          `${804 + n} - ${397 + session}`,
+          `If ${27 + n} × ? = ${(27 + n) * (9 + session)}, what is ?`
+        ];
+      }
+      if (day === 13) {
+        return [
+          `124 × 23 (stretch)`,
+          `${318 + session} × 24`,
+          `${452 + session} × 31`,
+          `${607 + session} - 289`,
+          `${215 + session} × 42 (stretch)`
+        ];
+      }
+      if (day === 14) {
+        return [
+          `${426 + session} × 35`,
+          `${539 + session} × 27`,
+          `215 × 42 (stretch)`,
+          `${782 + session} - 468`,
+          `${643 + session} × 18`
+        ];
+      }
+      return [
+        `547 × 918 (stretch)`,
+        `${732 + session} × 46`,
+        `${689 + session} × 32`,
+        `${950 + session} - 487`,
+        `${804 + session} × 25`
+      ];
+    }
+
+    function problemSolving(day, session) {
+      const n = day + session;
+      const stage = phase(day);
+      if (stage === 1) {
+        return [
+          `Mia has ${8 + n} apples. She gets ${6 + day} more. How many apples now?`,
+          `A shelf has ${19 + n} books. ${7 + session} are borrowed. How many are left?`,
+          `There are ${3 + session} bags with ${4 + day} marbles in each bag. How many marbles?`,
+          `Sam had ${15 + n} stickers and gave away ${5 + session}. How many stickers remain?`,
+          `A class makes ${2 + session} rows with ${5 + day} chairs in each row. How many chairs?`
+        ];
+      }
+      if (stage === 2) {
+        return [
+          `There are ${6 + session} boxes. Each box has ${7 + day} crayons. How many crayons total?`,
+          `Liam buys ${4 + session} packs of balloons with ${8 + day} balloons each. How many balloons?`,
+          `A toy store had ${84 + n} toys. It sold ${29 + session}. How many toys are left?`,
+          `Nora puts ${5 + session} pencils in each of ${9 + day} cups. How many pencils?`,
+          `A library gets ${37 + n} new books in the morning and ${26 + day} in the afternoon. How many new books?`
+        ];
+      }
+      if (stage === 3) {
+        return [
+          `A farmer packs ${24 + n} oranges in each crate. He fills ${3 + session} crates. How many oranges?`,
+          `There are ${132 + n} stickers. ${4 + session} children share them equally. How many per child?`,
+          `A school buys ${16 + n} boxes of pencils. Each box has ${9 + session} pencils. How many pencils?`,
+          `Ben reads ${28 + n} pages each day for ${3 + session} days. How many pages in all?`,
+          `A bus has ${245 + n} seats. ${127 + session} are filled. How many empty seats?`
+        ];
+      }
+      if (stage === 4) {
+        return [
+          `A shop has ${18 + n} shelves. Each shelf has ${14 + session} books. How many books total?`,
+          `Each table has ${12 + session} chairs. There are ${23 + n} tables. How many chairs?`,
+          `A school ordered ${34 + n} packs of paper. Each pack has ${25 + session} sheets. How many sheets?`,
+          `Tia had ${640 + n} stickers. She gave ${285 + session} away and then got 120 more. How many now?`,
+          `A game store sold ${27 + n} toy cars each day for ${6 + session} days. How many toy cars?`
+        ];
+      }
+      if (day === 13) {
+        return [
+          `A factory packs 124 pencils in each box and makes 23 boxes. How many pencils?`,
+          `A reading club has 215 students. Each gets 42 stickers. How many stickers are needed?`,
+          `A truck carries ${326 + session} boxes. Each box has 28 books. How many books?`,
+          `A shop had 980 balloons. It sold 365 in the morning and 214 in the afternoon. How many left?`,
+          `A garden has 36 rows with 27 plants in each row. How many plants total?`
+        ];
+      }
+      if (day === 14) {
+        return [
+          `A school buys ${248 + session} notebooks for each of 32 classes. How many notebooks?`,
+          `A farmer packs 215 apples in each crate and sends 42 crates. How many apples?`,
+          `A toy company made ${407 + session} robots each week for 24 weeks. How many robots?`,
+          `A hall has 1,200 chairs. 468 are used in one event and 327 in another. How many chairs stay empty?`,
+          `A bakery uses 38 trays with 26 cookies on each tray. How many cookies?`
+        ];
+      }
+      return [
+        `A giant warehouse ships 547 boxes each day for 918 days (stretch). How many boxes?`,
+        `A school has ${352 + session} students. Each needs 24 pencils. How many pencils?`,
+        `A library stacks ${418 + session} books on each of 36 shelves. How many books?`,
+        `A theater sold 2,000 tickets. 785 were sold on Friday and 649 on Saturday. How many are left?`,
+        `A toy fair has 125 booths. Each booth sells 43 toys. How many toys in all?`
+      ];
+    }
+
+    function sessionData(day, sessionName, sessionIndex) {
+      return {
+        name: sessionName,
+        categories: {
+          "Easy": easy(day, sessionIndex),
+          "Intermediate": intermediate(day, sessionIndex),
+          "Pattern Recognition": pattern(day, sessionIndex),
+          "Hard": hard(day, sessionIndex),
+          "Problem Solving": problemSolving(day, sessionIndex)
+        }
+      };
+    }
+
+    const plan = Array.from({ length: 15 }, (_, i) => {
+      const day = i + 1;
+      return {
+        day,
+        note: day <= 3 ? "Build confidence with review + first multiplication ideas" :
+              day <= 6 ? "Practice stronger facts, 2-digit operations, and logic" :
+              day <= 9 ? "Grow into multi-digit by 1-digit and place value" :
+              day <= 12 ? "Use 2-digit by 2-digit with partial products" :
+                          "Stretch with 3-digit multiplication and challenge logic",
+        sessions: [
+          sessionData(day, "Morning Session", 0),
+          sessionData(day, "Afternoon Session", 1)
+        ]
+      };
+    });
+
+    const dayNav = document.getElementById("dayNav");
+    const content = document.getElementById("content");
+    let currentDay = 1;
+
+    function render() {
+      dayNav.innerHTML = "";
+      content.innerHTML = "";
+
+      plan.forEach((dayItem) => {
+        const b = document.createElement("button");
+        b.className = "day-btn" + (dayItem.day === currentDay ? " active" : "");
+        b.textContent = `Day ${dayItem.day}`;
+        b.addEventListener("click", () => { currentDay = dayItem.day; render(); });
+        dayNav.appendChild(b);
+
+        const dayCard = document.createElement("section");
+        dayCard.className = "day-card" + (dayItem.day === currentDay ? " active" : "");
+
+        let html = `<h2>Day ${dayItem.day}</h2><p class="subtitle">${dayItem.note}</p>`;
+        dayItem.sessions.forEach((session) => {
+          html += `<article class="session"><h3>${session.name}</h3>`;
+          categoryOrder.forEach((cat) => {
+            const questions = session.categories[cat];
+            html += `<section class="category"><h4>${cat} (5 questions)</h4><ol>`;
+            questions.forEach((q) => {
+              html += `<li>${q}</li>`;
+            });
+            html += `</ol></section>`;
+          });
+          html += `</article>`;
+        });
+
+        html += `<div class="pager">
+          <button ${dayItem.day === 1 ? "disabled" : ""} data-dir="prev">Previous Day</button>
+          <button ${dayItem.day === 15 ? "disabled" : ""} data-dir="next">Next Day</button>
+        </div>`;
+
+        dayCard.innerHTML = html;
+        dayCard.querySelectorAll(".pager button").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            if (btn.dataset.dir === "prev" && currentDay > 1) currentDay -= 1;
+            if (btn.dataset.dir === "next" && currentDay < 15) currentDay += 1;
+            render();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        });
+
+        content.appendChild(dayCard);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
