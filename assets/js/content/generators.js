@@ -27,3 +27,8 @@ export const sampleInts = (seed, min, max, count) => {
   }
   return output;
 };
+
+export const isDayUnlocked = (dayNumber, state) => {
+  if (dayNumber <= 1) return true;
+  return state.doneDays.includes(dayNumber - 1);
+};

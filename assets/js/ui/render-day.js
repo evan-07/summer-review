@@ -1,6 +1,6 @@
 import { CATEGORY_ORDER, TOTAL_DAYS, STATUS, SCORE_SOURCE, SESSION_KEYS } from '../content/config.js';
 import { getBonusQuestions } from '../content/bonus-generators.js';
-import { parseDayFromSearch, getDayUrl } from '../content/generators.js';
+import { parseDayFromSearch, getDayUrl, isDayUnlocked } from '../content/generators.js';
 import { getDayConfig, getRequiredQuestions } from '../content/question-bank.js';
 import { getDayProgress } from '../state.js';
 import { markSectionCompleted, recalcDay } from '../features/progress.js';
@@ -10,6 +10,10 @@ import { formatDuration, renderTracker } from './components.js';
 
 export const renderDayPage = (state) => {
   const day = parseDayFromSearch(window.location.search);
+  if (!isDayUnlocked(day, state)) {
+    window.location.href = 'index.html';
+    return;
+  }
   const cfg = getDayConfig(day);
   const dayProgress = getDayProgress(state, day);
   let session = state.activeSession || 'morning';
@@ -24,10 +28,22 @@ export const renderDayPage = (state) => {
   renderTracker(document.querySelector('[data-progress-tracker]'), day, state.doneDays);
 
   const jump = document.querySelector('[data-day-jump]');
-  jump.innerHTML = Array.from({ length: TOTAL_DAYS }, (_, i) => `<option value="${i + 1}" ${i + 1 === day ? 'selected' : ''}>Day ${i + 1}</option>`).join('');
+  jump.innerHTML = Array.from({ length: TOTAL_DAYS }, (_, i) => {
+    const d = i + 1;
+    const locked = !isDayUnlocked(d, state);
+    return `<option value="${d}" ${d === day ? 'selected' : ''} ${locked ? 'disabled' : ''}>${locked ? '\u{1F512} ' : ''}Day ${d}</option>`;
+  }).join('');
   jump.onchange = () => { window.location.href = getDayUrl(jump.value); };
   document.querySelector('[data-prev-day]').href = getDayUrl(day - 1);
-  document.querySelector('[data-next-day]').href = getDayUrl(day + 1);
+  const nextDayEl = document.querySelector('[data-next-day]');
+  const nextDay = day + 1;
+  if (nextDay <= TOTAL_DAYS && isDayUnlocked(nextDay, state)) {
+    nextDayEl.href = getDayUrl(nextDay);
+  } else {
+    nextDayEl.removeAttribute('href');
+    nextDayEl.setAttribute('aria-disabled', 'true');
+    nextDayEl.classList.add('btn--disabled');
+  }
 
   const renderSessionTimer = () => {
     const timerEl = document.querySelector('[data-session-timer]');

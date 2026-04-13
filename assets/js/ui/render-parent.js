@@ -1,6 +1,7 @@
 import { CATEGORY_ORDER, TOTAL_DAYS } from '../content/config.js';
 import { filterScores, saveParentScore, updateParentScore, deleteParentScore } from '../features/parent-scores.js';
 import { saveState } from '../storage.js';
+import { createDefaultState } from '../state.js';
 
 export const renderParentPage = (state) => {
   const form = document.querySelector('[data-score-form]');
@@ -77,6 +78,17 @@ export const renderParentPage = (state) => {
       state.parentScores = [];
       saveState(state);
       rerender();
+    };
+  }
+  const resetBtn = document.querySelector('[data-reset-all-progress]');
+  if (resetBtn) {
+    resetBtn.onclick = () => {
+      if (!window.confirm('Reset all progress? This clears day completions, timers, and activity data. Parent scores are kept.')) return;
+      const preserved = state.parentScores;
+      Object.assign(state, createDefaultState());
+      state.parentScores = preserved;
+      saveState(state);
+      window.location.href = 'index.html';
     };
   }
   rerender();

@@ -1,6 +1,6 @@
 import { TOTAL_DAYS, STATUS } from '../content/config.js';
 import { getDayConfig } from '../content/question-bank.js';
-import { getDayUrl } from '../content/generators.js';
+import { getDayUrl, isDayUnlocked } from '../content/generators.js';
 import { getDayProgress } from '../state.js';
 import { formatDuration, renderTracker } from './components.js';
 
@@ -30,11 +30,20 @@ export const renderIndexPage = (state) => {
   for (let day = 1; day <= TOTAL_DAYS; day += 1) {
     const cfg = getDayConfig(day);
     const progress = getDayProgress(state, day);
+    const unlocked = isDayUnlocked(day, state);
     const status = progress.dayCompleted ? STATUS.COMPLETED : progress.totalSeconds > 0 ? STATUS.IN_PROGRESS : STATUS.NOT_STARTED;
-    const card = document.createElement('a');
-    card.href = getDayUrl(day);
-    card.className = `card day-card day-card--${status}`;
-    card.innerHTML = `<h3>Day ${day} ${cfg.theme.icon}</h3><p>${cfg.note}</p><span class="chip">${cfg.theme.name}</span>`;
-    grid.appendChild(card);
+    if (unlocked) {
+      const card = document.createElement('a');
+      card.href = getDayUrl(day);
+      card.className = `card day-card day-card--${status}`;
+      card.innerHTML = `<h3>Day ${day} ${cfg.theme.icon}</h3><p>${cfg.note}</p><span class="chip">${cfg.theme.name}</span>`;
+      grid.appendChild(card);
+    } else {
+      const card = document.createElement('div');
+      card.className = 'card day-card day-card--locked';
+      card.setAttribute('aria-disabled', 'true');
+      card.innerHTML = `<h3>Day ${day} \u{1F512}</h3><p>${cfg.note}</p><span class="chip">${cfg.theme.name}</span>`;
+      grid.appendChild(card);
+    }
   }
 };

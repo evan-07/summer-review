@@ -18,3 +18,6 @@
 .pill.not_started{background:#f0f0f0}
 .chip{display:inline-block;font-size:.7rem;background:#e8edff;color:var(--accent);border-radius:999px;padding:2px 8px;margin-top:4px}
 .muted{color:var(--muted);font-size:.85rem;margin:4px 0}
+.day-card--locked{opacity:.45;cursor:not-allowed;filter:grayscale(60%)}
+.btn--disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
+.btn-danger{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
