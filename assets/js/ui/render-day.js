@@ -119,7 +119,7 @@ export const renderDayPage = (state) => {
     const pills = document.querySelector('[data-section-pills]');
     pills.innerHTML = CATEGORY_ORDER.map((c) => {
       const st = dayProgress[session].sections[c].status;
-      const badge = st === STATUS.COMPLETED ? '✓' : st === STATUS.IN_PROGRESS ? 'In progress' : 'Ready';
+      const badge = st === STATUS.COMPLETED ? '✓' : st === STATUS.IN_PROGRESS ? 'In progress' : ' Ready';
       return `<button class="pill ${st}" data-section="${c}">${c}<span>${badge}</span></button>`;
     }).join('');
     pills.querySelectorAll('[data-section]').forEach((btn) => {
