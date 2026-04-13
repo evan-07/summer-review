@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Grade 2 Math Adventure</title>
   <link rel="stylesheet" href="assets/style.css" />
 </head>
@@ -11,25 +11,16 @@
     <div class="nav-left"><strong>Grade 2 Math Adventure</strong></div>
     <div class="nav-right"><span>Completed: <strong data-done-count>0 / 15</strong></span></div>
   </header>
-
   <main class="container">
     <section class="hero card">
-      <h1>Pick Your Day 🎒</h1>
-      <p>Two sessions per day. Write answers on paper, track progress in the app.</p>
+      <h1>Pick Your Day &#x1F392;</h1>
       <p class="summary-inline"><strong>Last active day:</strong> <span data-active-day>None yet</span> • <strong>Total practice time:</strong> <span data-total-time>0m 0s</span></p>
-      <div class="button-row button-group">
-        <a class="btn btn-primary" href="parent.html" data-animate="button">Parent Dashboard</a>
-      </div>
+      <div class="button-row"><a class="btn btn-primary" href="parent.html">Parent Dashboard</a></div>
     </section>
     <section data-continue-day></section>
-
     <nav class="progress-tracker" data-progress-tracker aria-label="Day Progress"></nav>
-
     <section class="day-grid" data-day-grid></section>
-
-    <p class="footer-note">Works offline after first load. Optimized for iPad Safari touch targets.</p>
   </main>
-
-  <script src="assets/script.js"></script>
+  <script type="module" src="assets/js/app.js"></script>
 </body>
 </html>

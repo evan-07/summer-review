@@ -2,127 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Parent Dashboard • Grade 2 Math Adventure</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parent Dashboard</title>
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body data-page="parent">
   <header class="top-nav">
-    <div class="nav-left button-group">
-      <a class="btn" href="index.html">🏠 Home</a>
-      <strong>Parent Dashboard</strong>
-    </div>
+    <div class="nav-left"><strong>Parent Dashboard</strong></div>
+    <div class="nav-right"><a class="btn" href="index.html">&#x1F3E0; Home</a></div>
   </header>
-
   <main class="container">
+    <section class="card"><h1>Score History & Trends</h1></section>
     <section class="card">
-      <h1>Score History & Trends</h1>
-      <p>Add, edit, and review student performance over time. Data stays local on this device.</p>
-      <p class="footer-note">This is the stabilized Pass 1 parent view. Trend visuals are intentionally lightweight for now.</p>
+      <div class="button-row">
+        <button class="btn" type="button" data-clear-parent-scores>Clear Score History</button>
+        <button class="btn btn-danger" type="button" data-reset-all-progress>Reset All Progress</button>
+      </div>
     </section>
-
     <section class="card summary-grid" data-parent-summary></section>
-
     <section class="parent-layout">
       <section class="card">
-        <h3 data-form-title>Add score entry</h3>
+        <h3>Add score entry</h3>
         <form data-score-form>
           <div class="parent-form-grid">
-            <label>Day
-              <select name="day" required data-day-options></select>
-            </label>
-            <label>Session
-              <select name="session" required>
-                <option value="morning">Morning</option>
-                <option value="afternoon">Afternoon</option>
-              </select>
-            </label>
-            <label>Section
-              <select name="section">
-                <option value="">Session only</option>
-                <option>Easy</option>
-                <option>Intermediate</option>
-                <option>Pattern Recognition</option>
-                <option>Hard</option>
-                <option>Problem Solving</option>
-              </select>
-            </label>
-            <label>Score
-              <input type="number" min="0" name="score" required />
-            </label>
-            <label>Max Score
-              <input type="number" min="1" name="maxScore" required />
-            </label>
-            <label>Time (seconds)
-              <input type="number" min="0" name="timeSeconds" />
-            </label>
-            <label class="full">Notes
-              <textarea name="notes" placeholder="Optional notes"></textarea>
-            </label>
+            <label>Day<select name="day" required data-day-options></select></label>
+            <label>Session<select name="session" required><option value="morning">Morning</option><option value="afternoon">Afternoon</option></select></label>
+            <label>Section<select name="section"><option value="">Session only</option></select></label>
+            <label>Source<select name="source"><option value="required">required</option><option value="bonus">bonus</option></select></label>
+            <label>Score<input name="score" type="number" min="0" required /></label>
+            <label>Max Score<input name="maxScore" type="number" min="1" required /></label>
+            <label>Time (seconds)<input name="timeSeconds" type="number" min="0" /></label>
+            <label class="full">Notes<textarea name="notes"></textarea></label>
           </div>
-          <div class="row">
-            <button class="btn btn-primary" type="submit" data-save-score data-animate="button">Save Score</button>
-            <button class="btn hidden" type="button" data-cancel-edit data-animate="button">Cancel Edit</button>
-          </div>
+          <button class="btn btn-primary" type="submit">Save Score</button>
         </form>
       </section>
-
       <section class="card">
         <h3>Filters</h3>
         <div class="parent-form-grid">
-          <label>Day
-            <select data-filter-day>
-              <option value="">All days</option>
-            </select>
-          </label>
-          <label>Session
-            <select data-filter-session>
-              <option value="">All sessions</option>
-              <option value="morning">Morning</option>
-              <option value="afternoon">Afternoon</option>
-            </select>
-          </label>
-          <label class="full">Section
-            <select data-filter-section>
-              <option value="">All sections</option>
-              <option>Easy</option>
-              <option>Intermediate</option>
-              <option>Pattern Recognition</option>
-              <option>Hard</option>
-              <option>Problem Solving</option>
-            </select>
-          </label>
+          <label>Day<select data-filter-day><option value="">All days</option></select></label>
+          <label>Session<select data-filter-session><option value="">All sessions</option><option value="morning">Morning</option><option value="afternoon">Afternoon</option></select></label>
+          <label>Section<select data-filter-section><option value="">All sections</option></select></label>
+          <label>Source<select data-filter-source><option value="">All sources</option><option value="required">required</option><option value="bonus">bonus</option></select></label>
         </div>
       </section>
     </section>
-
-    <section class="card trend-chart">
-      <h3>Score Trend</h3>
-      <svg class="trend-svg" data-score-trend viewBox="0 0 100 40" preserveAspectRatio="none"></svg>
-    </section>
-
-    <section class="card trend-chart">
-      <h3>Time Spent Trend</h3>
-      <svg class="trend-svg" data-time-trend viewBox="0 0 100 40" preserveAspectRatio="none"></svg>
-    </section>
-
-    <section class="card trend-chart">
-      <h3>Section Performance</h3>
-      <div class="section-bars" data-section-bars></div>
-    </section>
-
-    <section class="card table-wrap">
-      <h3>History</h3>
-      <table>
-        <thead>
-          <tr><th>When</th><th>Day</th><th>Session</th><th>Section</th><th>Score</th><th>%</th><th>Time</th><th>Notes</th><th>Actions</th></tr>
-        </thead>
-        <tbody data-history-body></tbody>
-      </table>
-    </section>
+    <section class="card trend-chart"><h3>Score Trend</h3><svg class="trend-svg" data-score-trend viewBox="0 0 100 40"></svg></section>
+    <section class="card table-wrap"><h3>History</h3><table><thead><tr><th>Date</th><th>Day</th><th>Session</th><th>Section</th><th>Source</th><th>Score</th><th>%</th><th>Notes</th><th>Actions</th></tr></thead><tbody data-history-body></tbody></table></section>
   </main>
-
-  <script src="assets/script.js"></script>
-  <script src="assets/parent.js"></script>
+  <script type="module" src="assets/js/app.js"></script>
 </body>
 </html>

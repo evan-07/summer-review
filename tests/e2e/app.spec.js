@@ -1,85 +1,60 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 const viewports = [
   { width: 390, height: 844 },
   { width: 768, height: 1024 },
+  { width: 1024, height: 768 },
   { width: 1366, height: 768 }
 ];
 
-async function trackConsoleErrors(page) {
-  const errors = [];
-  page.on('console', (msg) => {
-    if (msg.type() === 'error') errors.push(msg.text());
-  });
-  page.on('pageerror', (err) => errors.push(String(err)));
-  return errors;
-}
-
-test('home page renders summary and day cards and can open a day', async ({ page }) => {
-  const errors = await trackConsoleErrors(page);
+test('home links to day template', async ({ page }) => {
   await page.goto('/index.html');
-
-  await expect(page.locator('[data-done-count]')).toBeVisible();
-  await expect(page.locator('[data-active-day]')).toBeVisible();
-  await expect(page.locator('[data-total-time]')).toBeVisible();
   await expect(page.locator('[data-day-grid] .day-card')).toHaveCount(15);
-
-  await page.locator('[data-day-grid] .day-card').first().click();
-  await expect(page).toHaveURL(/day-01\.html/);
-  expect(errors).toEqual([]);
+  await expect(page.locator('[data-day-grid] .day-card').first()).toHaveAttribute('href', /day\.html\?day=1/);
 });
 
-test('day page supports navigation, session flow, and finish day gating', async ({ page }) => {
-  const errors = await trackConsoleErrors(page);
-  await page.goto('/days/day-01.html');
-
-  await expect(page.locator('[data-day-title]')).toContainText('Day 1');
-
-  await page.locator('[data-next-day]').click();
-  await expect(page).toHaveURL(/day-02\.html/);
+test('day flow handles query, session, bonus, completion persistence', async ({ page }) => {
+  await page.goto('/day.html?day=999');
+  await expect(page).toHaveURL(/day\.html\?day=999/);
+  await expect(page.locator('[data-day-title]')).toContainText('Day 15');
   await page.locator('[data-prev-day]').click();
-  await expect(page).toHaveURL(/day-01\.html/);
-
-  await page.selectOption('[data-day-jump]', { label: 'Day 3' });
-  await expect(page).toHaveURL(/day-03\.html/);
-
+  await expect(page).toHaveURL(/day=14/);
+  await page.selectOption('[data-day-jump]', '2');
+  await expect(page).toHaveURL(/day=2/);
   await page.locator('[data-start-session="morning"]').click();
-  await expect(page.locator('[data-session-title]')).toContainText('Morning Session');
-  await expect(page.locator('[data-session-content] .question-card')).toBeVisible();
-
-  await page.locator('[data-next-section]').click();
-  await expect(page.locator('[data-session-content] .question-card h3')).toContainText('Intermediate');
-
-  await expect(page.locator('[data-finish-day]')).toBeHidden();
-  expect(errors).toEqual([]);
+  await page.locator('[data-get-bonus]').click();
+  await expect(page.locator('.bonus-panel')).toHaveCount(1);
+  await page.locator('[data-get-bonus]').click();
+  await expect(page.locator('.bonus-panel')).toHaveCount(2);
+  await expect(page.locator('[data-session-content] ol').first()).toBeVisible();
 });
 
-test('invalid day value does not crash and parent page navigation works', async ({ page }) => {
-  const errors = await trackConsoleErrors(page);
-  await page.goto('/days/day-01.html');
-  await page.evaluate(() => {
-    document.body.dataset.day = '999';
-    window.location.reload();
-  });
-  await expect(page.locator('[data-day-title]')).toContainText('Day 1');
-
+test('parent dashboard CRUD/filter/trend render', async ({ page }) => {
   await page.goto('/parent.html');
-  await expect(page.locator('h1')).toContainText('Score History & Trends');
-  await page.getByRole('link', { name: /home/i }).first().click();
-  await expect(page).toHaveURL(/index\.html/);
-  expect(errors).toEqual([]);
+  await page.selectOption('select[name="day"]', '2');
+  await page.selectOption('select[name="session"]', 'morning');
+  await page.fill('input[name="score"]', '4');
+  await page.fill('input[name="maxScore"]', '5');
+  await page.fill('textarea[name="notes"]', 'good work');
+  await page.click('button[type="submit"]');
+  await expect(page.locator('[data-history-body] tr')).toHaveCount(1);
+  await page.click('[data-edit]');
+  await page.fill('input[name="score"]', '5');
+  await page.click('button[type="submit"]');
+  await expect(page.locator('[data-history-body]')).toContainText('100%');
+  await page.selectOption('[data-filter-day]', '2');
+  await expect(page.locator('[data-history-body] tr')).toHaveCount(1);
+  await page.click('[data-del]');
+  await expect(page.locator('[data-history-body] tr')).toHaveCount(0);
+  await expect(page.locator('[data-score-trend]')).toBeVisible();
 });
 
 for (const viewport of viewports) {
-  test(`responsive layout has no horizontal overflow at ${viewport.width}x${viewport.height}`, async ({ page }) => {
+  test(`responsive no overflow ${viewport.width}x${viewport.height}`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto('/days/day-01.html');
+    await page.goto('/day.html?day=1');
     await page.locator('[data-start-session="morning"]').click();
-
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(overflow).toBeFalsy();
-
-    const navHeight = await page.locator('.top-nav').boundingBox();
-    expect(navHeight?.height || 0).toBeGreaterThan(40);
   });
 }

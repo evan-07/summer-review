@@ -1,0 +1,4 @@
+*{box-sizing:border-box} html,body{max-width:100%;overflow-x:hidden} body{margin:0;font-family:"Avenir Next","Segoe UI",sans-serif;color:var(--ink);background:var(--bg);font-size:20px;line-height:1.5} .hidden{display:none!important}
+a{color:inherit} .container{max-width:1040px;margin:14px auto 80px;padding:0 14px}
+:focus-visible{outline:3px solid #111;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

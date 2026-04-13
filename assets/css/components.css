@@ -1,0 +1,23 @@
+.card{border:1px solid var(--line);background:var(--card);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px}
+.btn,button,select,input,textarea{min-height:var(--tap);border:1px solid var(--line);border-radius:var(--radius-md);padding:8px 10px;font-size:.9rem}
+.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}.btn-secondary{background:#eef3ff}
+.day-dot{display:grid;place-items:center;text-decoration:none;border:1px solid var(--line);border-radius:999px;min-height:40px;background:#fff}.day-dot.current{background:var(--accent);color:#fff}.day-dot.done{border-color:var(--ok)}
+.day-card{text-decoration:none}.pills{display:flex;flex-wrap:wrap;gap:8px}.pill{border-radius:999px}.pill.completed{background:#e6f9ee}.pill.in_progress{background:#fff3c9}
+.bonus-panel{border:1px dashed #b47cff;background:#f7f0ff;padding:10px;border-radius:12px;margin-top:8px}
+.continue-day-panel{padding:14px 16px}
+.continue-day-copy h3{margin:0 0 4px}
+.continue-day-copy p{margin:0;color:var(--muted);font-size:.85rem}
+.continue-day-panel .btn{white-space:nowrap}
+[data-session-timer]{margin:0 0 10px;color:var(--muted);font-weight:700}
+.summary-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.summary-item{border:1px solid var(--line);padding:8px;border-radius:10px}
+.table-wrap{overflow-x:auto} table{width:100%;border-collapse:collapse;font-size:.8rem} th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left}
+.trend-svg{width:100%;height:120px}
+.day-card--not_started{opacity:.75}
+.day-card--in_progress{border-left:4px solid var(--accent)}
+.day-card--completed{border-left:4px solid var(--ok)}
+.pill.not_started{background:#f0f0f0}
+.chip{display:inline-block;font-size:.7rem;background:#e8edff;color:var(--accent);border-radius:999px;padding:2px 8px;margin-top:4px}
+.muted{color:var(--muted);font-size:.85rem;margin:4px 0}
+.day-card--locked{opacity:.45;cursor:not-allowed;filter:grayscale(60%)}
+.btn--disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
+.btn-danger{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
