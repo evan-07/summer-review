@@ -8,10 +8,13 @@
 </head>
 <body data-page="day">
   <header class="top-nav">
-    <div class="nav-left button-group button-group--stack-mobile">
-      <a class="btn" href="index.html">🏠 Home</a>
-      <a class="btn" data-prev-day href="#">← Previous Day</a>
-      <a class="btn" data-next-day href="#">Next Day →</a>
+    <div class="nav-left">
+      <strong>Grade 2 Math Adventure</strong>
+      <div class="button-group button-group--stack-mobile">
+        <a class="btn" href="index.html">🏠 Home</a>
+        <a class="btn" data-prev-day href="#">← Previous Day</a>
+        <a class="btn" data-next-day href="#">Next Day →</a>
+      </div>
     </div>
     <div class="nav-right">
       <label>Go to Day: <select data-day-jump></select></label>
@@ -31,6 +34,7 @@
     </section>
     <section class="card" data-session-panel>
       <h2 data-session-title>Choose a session to begin</h2>
+      <p data-session-timer>Session timer: 0m 0s</p>
       <div class="pills" data-section-pills></div>
       <div data-session-content></div>
     </section>

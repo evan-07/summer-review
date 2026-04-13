@@ -6,6 +6,7 @@ export const renderParentPage = (state) => {
   const form = document.querySelector('[data-score-form]');
   const tbody = document.querySelector('[data-history-body]');
   const summary = document.querySelector('[data-parent-summary]');
+  const clearBtn = document.querySelector('[data-clear-parent-scores]');
   const filters = {
     day: document.querySelector('[data-filter-day]'),
     session: document.querySelector('[data-filter-session]'),
@@ -70,5 +71,13 @@ export const renderParentPage = (state) => {
   };
 
   Object.values(filters).forEach((el) => (el.onchange = rerender));
+  if (clearBtn) {
+    clearBtn.onclick = () => {
+      if (!window.confirm('Clear all saved parent score history?')) return;
+      state.parentScores = [];
+      saveState(state);
+      rerender();
+    };
+  }
   rerender();
 };

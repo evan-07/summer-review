@@ -6,7 +6,7 @@ import { getDayProgress } from '../state.js';
 import { markSectionCompleted, recalcDay } from '../features/progress.js';
 import { startTimer, stopTimer } from '../features/timer.js';
 import { saveState } from '../storage.js';
-import { renderTracker } from './components.js';
+import { formatDuration, renderTracker } from './components.js';
 
 export const renderDayPage = (state) => {
   const day = parseDayFromSearch(window.location.search);
@@ -14,6 +14,7 @@ export const renderDayPage = (state) => {
   const dayProgress = getDayProgress(state, day);
   let session = state.activeSession || 'morning';
   let section = state.activeSection || CATEGORY_ORDER[0];
+  let timerInterval = null;
 
   document.body.classList.add(cfg.theme.className);
   document.querySelector('[data-day-title]').textContent = `Day ${day} ${cfg.theme.icon} — ${cfg.theme.name}`;
@@ -26,6 +27,21 @@ export const renderDayPage = (state) => {
   jump.onchange = () => { window.location.href = getDayUrl(jump.value); };
   document.querySelector('[data-prev-day]').href = getDayUrl(day - 1);
   document.querySelector('[data-next-day]').href = getDayUrl(day + 1);
+
+  const renderSessionTimer = () => {
+    const timerEl = document.querySelector('[data-session-timer]');
+    if (!timerEl) return;
+    const live = state.timerState?.isRunning && state.timerState.day === day && state.timerState.session === session;
+    const baseSeconds = dayProgress[session]?.totalSeconds || 0;
+    const runningSeconds = live ? Math.floor((Date.now() - state.timerState.startedAt) / 1000) : 0;
+    timerEl.textContent = `Session timer: ${formatDuration(baseSeconds + Math.max(0, runningSeconds))}`;
+  };
+
+  const restartTimerTicker = () => {
+    if (timerInterval) clearInterval(timerInterval);
+    renderSessionTimer();
+    timerInterval = window.setInterval(renderSessionTimer, 1000);
+  };
 
   const renderSection = () => {
     const required = getRequiredQuestions({ day, session, category: section });
@@ -62,6 +78,7 @@ export const renderDayPage = (state) => {
       if (idx < CATEGORY_ORDER.length - 1) renderSection();
       else document.querySelector('[data-session-content]').innerHTML = '<section class="card"><h3>Session complete! ✅</h3></section>';
       recalcDay(state, day);
+      renderSessionTimer();
       if (dayProgress.dayCompleted) document.querySelector('[data-finish-day]').classList.remove('hidden');
       renderPills();
     };
@@ -75,7 +92,7 @@ export const renderDayPage = (state) => {
       return `<button class="pill ${st}" data-section="${c}">${c}<span>${badge}</span></button>`;
     }).join('');
     pills.querySelectorAll('[data-section]').forEach((btn) => {
-      btn.onclick = () => { section = btn.dataset.section; startTimer(state, day, session, section); renderSection(); renderPills(); saveState(state); };
+      btn.onclick = () => { section = btn.dataset.section; startTimer(state, day, session, section); renderSection(); renderPills(); renderSessionTimer(); saveState(state); };
     });
   };
 
@@ -88,6 +105,7 @@ export const renderDayPage = (state) => {
       saveState(state);
       renderSection();
       renderPills();
+      restartTimerTicker();
     };
   });
 
@@ -99,4 +117,8 @@ export const renderDayPage = (state) => {
   };
 
   document.querySelector('[data-parent-link]').href = 'parent.html';
+  restartTimerTicker();
+  window.addEventListener('beforeunload', () => {
+    if (timerInterval) clearInterval(timerInterval);
+  });
 };
