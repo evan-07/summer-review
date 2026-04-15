@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Day &bull; Grade 2 Math Adventure</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="/src/styles/app.css" />
 </head>
 <body data-page="day">
   <header class="top-nav">
@@ -22,27 +22,65 @@
   </header>
   <main class="container">
     <nav class="progress-tracker" data-progress-tracker aria-label="Day Progress"></nav>
-    <section class="card hero">
-      <h1 data-day-title></h1>
-      <p data-day-note></p>
-      <p><strong>Start with this:</strong> <span data-day-inspiration></span></p>
-      <div class="session-buttons">
-        <button class="btn btn-primary" data-start-session="morning">Morning Session</button>
-        <button class="btn btn-primary" data-start-session="afternoon">Afternoon Session</button>
+    <section class="card hero day-hero">
+      <div class="day-hero__main">
+        <p class="hero-kicker">Daily mission</p>
+        <h1 data-day-title></h1>
+        <p class="day-hero__note" data-day-note></p>
+        <p class="day-hero__inspiration"><strong>Math coach says:</strong> <span data-day-inspiration></span></p>
+        <div class="session-buttons day-session-launchers">
+          <button class="btn btn-primary" data-start-session="morning">Morning Session</button>
+          <button class="btn btn-primary" data-start-session="afternoon">Afternoon Session</button>
+        </div>
       </div>
+      <aside class="day-hero__side">
+        <div class="mission-mini-board" data-day-mission-board></div>
+      </aside>
     </section>
-    <section class="card">
-      <h2 data-session-title>Choose a session to begin</h2>
-      <p data-session-timer>Session timer: 0m 0s</p>
-      <div class="pills" data-section-pills></div>
-      <div data-session-content></div>
-    </section>
-    <section class="card hidden" data-finish-day>
-      <h3>&#x1F3C1; Finish Day</h3>
-      <p data-finish-day-msg>Complete both sessions first.</p>
-      <button class="btn btn-primary" data-finish-day-btn>Mark Day Complete</button>
+    <section class="day-practice-layout">
+      <aside class="day-practice-sidebar">
+        <section class="card sticky-progress" data-day-progress-strip aria-label="Current day progress"></section>
+      </aside>
+      <section class="day-practice-main">
+        <section class="card session-shell">
+          <div class="session-shell__top">
+            <div>
+              <p class="eyebrow">Practice now</p>
+              <h2 data-session-title>Choose a session to begin</h2>
+            </div>
+            <div class="session-shell__meta">
+              <span class="reward-pill" data-current-session-badge>Pick a mission</span>
+              <span class="status-badge status-badge--not_started" data-current-section-badge>Ready</span>
+            </div>
+          </div>
+          <p class="session-shell__timer" data-session-timer>Session timer: 0m 0s</p>
+          <div class="section-map">
+            <div class="section-map__top">
+              <div>
+                <p class="eyebrow">Section path</p>
+                <p class="muted">Move from warm-up to challenge and earn a star for each cleared section.</p>
+              </div>
+            </div>
+            <div class="pills" data-section-pills></div>
+          </div>
+          <section class="reward-flash hidden" data-reward-flash aria-live="polite"></section>
+          <div data-session-content></div>
+        </section>
+        <section class="card hidden celebration-panel" data-session-celebration aria-live="polite"></section>
+        <section class="card hidden finish-day-card" data-finish-day>
+          <div class="finish-day-card__top">
+            <div>
+              <p class="eyebrow">Mission complete</p>
+              <h3>&#x1F3C1; Finish Day</h3>
+            </div>
+            <span class="reward-pill">All stars ready</span>
+          </div>
+          <p data-finish-day-msg>Complete both sessions first.</p>
+          <button class="btn btn-primary" data-finish-day-btn>Mark Day Complete</button>
+        </section>
+      </section>
     </section>
   </main>
-  <script type="module" src="assets/js/app.js"></script>
+  <script type="module" src="src/main.ts"></script>
 </body>
 </html>

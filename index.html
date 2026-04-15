@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Grade 2 Math Adventure</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="/src/styles/app.css" />
 </head>
 <body data-page="index">
   <header class="top-nav">
@@ -13,14 +13,37 @@
   </header>
   <main class="container">
     <section class="hero card">
-      <h1>Pick Your Day &#x1F392;</h1>
-      <p class="summary-inline"><strong>Last active day:</strong> <span data-active-day>None yet</span> • <strong>Total practice time:</strong> <span data-total-time>0m 0s</span></p>
-      <div class="button-row"><a class="btn btn-primary" href="parent.html">Parent Dashboard</a></div>
+      <p class="hero-kicker">Mission hub</p>
+      <h1>Choose Your Next Math Mission</h1>
+      <p class="summary-inline"><strong>Last active day:</strong> <span data-active-day>None yet</span> &bull; <strong>Total practice time:</strong> <span data-total-time>0m 0s</span></p>
+      <p>Every day is a mini adventure. Earn stars in each section, finish both sessions, and unlock the next mission on the path.</p>
+      <div class="button-row">
+        <a class="btn btn-primary" data-primary-mission-link href="day.html?day=1">Start Mission</a>
+        <a class="btn" href="parent.html">Parent Dashboard</a>
+      </div>
+    </section>
+    <section class="mission-hub">
+      <section class="card mission-spotlight" data-mission-spotlight aria-label="Current mission"></section>
+      <section class="card mission-progress-board">
+        <p class="eyebrow">Adventure progress</p>
+        <div class="summary-grid summary-grid--compact" data-adventure-stats></div>
+      </section>
     </section>
     <section data-continue-day></section>
     <nav class="progress-tracker" data-progress-tracker aria-label="Day Progress"></nav>
+    <section class="journey-banner card">
+      <div>
+        <p class="eyebrow">Adventure path</p>
+        <h2>Follow the path day by day.</h2>
+        <p class="muted">Completed missions glow, the active mission stands out, and locked missions wait until the earlier one is cleared.</p>
+      </div>
+      <div class="journey-banner__tokens">
+        <span class="reward-pill" data-next-goal>Next goal: Day 1</span>
+        <span class="status-badge status-badge--progress" data-journey-status>Ready to begin</span>
+      </div>
+    </section>
     <section class="day-grid" data-day-grid></section>
   </main>
-  <script type="module" src="assets/js/app.js"></script>
+  <script type="module" src="src/main.ts"></script>
 </body>
 </html>

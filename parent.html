@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Parent Dashboard</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="/src/styles/app.css" />
 </head>
 <body data-page="parent">
   <header class="top-nav">
@@ -12,17 +12,28 @@
     <div class="nav-right"><a class="btn" href="index.html">&#x1F3E0; Home</a></div>
   </header>
   <main class="container">
-    <section class="card"><h1>Score History & Trends</h1></section>
-    <section class="card">
-      <div class="button-row">
+    <section class="card parent-hero">
+      <div class="parent-hero__copy">
+        <p class="hero-kicker">Family progress view</p>
+        <h1>Score History and Learning Trends</h1>
+        <p class="muted">Track completed work, watch score patterns over time, and keep notes on where extra support helps most.</p>
+      </div>
+      <div class="parent-hero__actions button-row">
         <button class="btn" type="button" data-clear-parent-scores>Clear Score History</button>
         <button class="btn btn-danger" type="button" data-reset-all-progress>Reset All Progress</button>
       </div>
     </section>
     <section class="card summary-grid" data-parent-summary></section>
-    <section class="parent-layout">
-      <section class="card">
-        <h3>Add score entry</h3>
+    <section class="parent-dashboard-grid">
+      <section class="parent-left-column">
+        <section class="card parent-panel">
+          <div class="parent-panel__header">
+            <div>
+              <p class="eyebrow">Manual entry</p>
+              <h3>Add score entry</h3>
+            </div>
+            <span class="reward-pill">Keep recent notes with each score</span>
+          </div>
         <form data-score-form>
           <div class="parent-form-grid">
             <label>Day<select name="day" required data-day-options></select></label>
@@ -36,20 +47,46 @@
           </div>
           <button class="btn btn-primary" type="submit">Save Score</button>
         </form>
+        </section>
+        <section class="card trend-chart parent-panel">
+          <div class="parent-panel__header">
+            <div>
+              <p class="eyebrow">Trend snapshot</p>
+              <h3>Score Trend</h3>
+            </div>
+            <span class="status-badge status-badge--progress">Live filters apply</span>
+          </div>
+          <svg class="trend-svg" data-score-trend viewBox="0 0 100 40"></svg>
+        </section>
       </section>
-      <section class="card">
-        <h3>Filters</h3>
-        <div class="parent-form-grid">
-          <label>Day<select data-filter-day><option value="">All days</option></select></label>
-          <label>Session<select data-filter-session><option value="">All sessions</option><option value="morning">Morning</option><option value="afternoon">Afternoon</option></select></label>
-          <label>Section<select data-filter-section><option value="">All sections</option></select></label>
-          <label>Source<select data-filter-source><option value="">All sources</option><option value="required">required</option><option value="bonus">bonus</option></select></label>
-        </div>
-      </section>
+      <aside class="parent-right-column">
+        <section class="card parent-panel">
+          <div class="parent-panel__header">
+            <div>
+              <p class="eyebrow">Review tools</p>
+              <h3>Filters</h3>
+            </div>
+          </div>
+          <div class="parent-form-grid">
+            <label>Day<select data-filter-day><option value="">All days</option></select></label>
+            <label>Session<select data-filter-session><option value="">All sessions</option><option value="morning">Morning</option><option value="afternoon">Afternoon</option></select></label>
+            <label>Section<select data-filter-section><option value="">All sections</option></select></label>
+            <label>Source<select data-filter-source><option value="">All sources</option><option value="required">required</option><option value="bonus">bonus</option></select></label>
+          </div>
+        </section>
+      </aside>
     </section>
-    <section class="card trend-chart"><h3>Score Trend</h3><svg class="trend-svg" data-score-trend viewBox="0 0 100 40"></svg></section>
-    <section class="card table-wrap"><h3>History</h3><table><thead><tr><th>Date</th><th>Day</th><th>Session</th><th>Section</th><th>Source</th><th>Score</th><th>%</th><th>Notes</th><th>Actions</th></tr></thead><tbody data-history-body></tbody></table></section>
+    <section class="card table-wrap parent-panel">
+      <div class="parent-panel__header">
+        <div>
+          <p class="eyebrow">History log</p>
+          <h3>Saved Entries</h3>
+        </div>
+        <span class="reward-pill">Edit or remove any row</span>
+      </div>
+      <table><thead><tr><th>Date</th><th>Day</th><th>Session</th><th>Section</th><th>Source</th><th>Score</th><th>%</th><th>Notes</th><th>Actions</th></tr></thead><tbody data-history-body></tbody></table>
+    </section>
   </main>
-  <script type="module" src="assets/js/app.js"></script>
+  <script type="module" src="src/main.ts"></script>
 </body>
 </html>
